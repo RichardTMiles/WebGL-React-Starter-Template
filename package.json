@@ -45,17 +45,15 @@
     "sweetalert": "^2.1.2"
   },
   "scripts": {
-    "env": "TAG=$( git describe --tags `git rev-list --tags --max-count=1` ) && printf \"REACT_APP_TAG=${TAG}\nREACT_APP_URI=view/releases/${TAG}\nNODE_PATH=./src\nHOST=local.carbonphp.com\nPUBLIC_URL=//carbonphp.com/view/releases/$( git describe --tags `git rev-list --tags --max-count=1` )\" > .env",
-    "start": "npm run env && react-scripts start",
-    "build": "npm run env && react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "rei": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "lint:check": "eslint . --ext=js,jsx;  exit 0",
     "lint:fix": "eslint . --ext=js,jsx --fix;  exit 0",
-    "build-package": "babel src --out-dir dist",
-    "postinstall": "[ ! -d \"src/assets/src\" ] && git clone git@github.com:RichardTMiles/CarbonPHP.git src/assets/src "
+    "build-package": "babel src --out-dir dist"
   },
   "repository": {
     "type": "git",
