@@ -7,7 +7,25 @@ I have not counted. The top and bottom of the actual game reserved for
 making the border; so the ~ playable game is really only 34 in length. 
 So removing top and bottom border lets mock this below.
 
-Orb Bases are 5 X 4
+
+
+Grid is                          36 X 
+
+G 2 RE of Top Box                36  x  25
+
+                                        29 - 35        
+                                
+To edge of (Orb) Base block out   36 X 55 
+
+
+
+Grid to FB                       36 X 
+
+Orb Bases are                     5 X 4
+
+
+
+
 
 
 this is rought
