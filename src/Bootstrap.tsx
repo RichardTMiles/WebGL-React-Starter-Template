@@ -24,6 +24,7 @@ import RotatedTriangle from "./examples/RotatedTriangle";
 import RotatedTriangleMatrix from "./examples/RotatedTriangleMatrix";
 import ScaledTriangleMatrix from "./examples/ScaledTriangleMatrix";
 import RotatedTranslatedTriangle from "./examples/RotatedTranslatedTriangle";
+import RotatingTriangle from "./examples/RotatingTriangle";
 
 export interface iCustomRoute {
     component?: any,
@@ -534,6 +535,10 @@ class bootstrap extends Component<any, {
                 path: "/RotatedTranslatedTriangle",
                 name: "RotatedTranslatedTriangle",
                 component: RotatedTranslatedTriangle
+            },{
+                path: "/RotatingTriangle",
+                name: "RotatingTriangle",
+                component: RotatingTriangle
             },
             {
                 path: "/orb",
