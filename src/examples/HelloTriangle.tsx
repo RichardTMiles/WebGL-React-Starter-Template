@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/cuon-utils"
+import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
 export default class HelloTriangle extends Component<any, any> {

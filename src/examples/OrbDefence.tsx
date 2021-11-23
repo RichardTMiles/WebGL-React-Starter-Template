@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/cuon-utils"
+import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
 
 const WALL = 'WALL';
 const BASE = 'BASE';

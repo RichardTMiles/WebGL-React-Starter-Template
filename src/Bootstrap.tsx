@@ -25,6 +25,7 @@ import RotatedTriangleMatrix from "./examples/RotatedTriangleMatrix";
 import ScaledTriangleMatrix from "./examples/ScaledTriangleMatrix";
 import RotatedTranslatedTriangle from "./examples/RotatedTranslatedTriangle";
 import RotatingTriangle from "./examples/RotatingTriangle";
+import AudioThreeJS from "./examples/AudioThreeJS";
 
 export interface iCustomRoute {
     component?: any,
@@ -539,6 +540,10 @@ class bootstrap extends Component<any, {
                 path: "/RotatingTriangle",
                 name: "RotatingTriangle",
                 component: RotatingTriangle
+            },{
+                path: "/AudioThreeJS",
+                name: "AudioThreeJS",
+                component: AudioThreeJS
             },
             {
                 path: "/orb",

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/cuon-utils"
+import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
 
 export default class ColoredPoints extends Component<any, {
     x: number,

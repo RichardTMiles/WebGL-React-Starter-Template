@@ -4,5 +4,9 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="three.js" level="application" />
+    <orderEntry type="library" name="OrbitControls" level="application" />
+    <orderEntry type="library" name="dat-gui" level="application" />
+    <orderEntry type="library" name="simplex-noise" level="application" />
   </component>
 </module>

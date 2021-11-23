@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {getWebGLContext, initShaders} from "../assets/cuon-utils";
-import { Matrix4 } from "assets/cuon-matrix";
+import {getWebGLContext, initShaders} from "../assets/js/cuon-utils";
+import { Matrix4 } from "assets/js/cuon-matrix";
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
 export default class RotatingTriangle extends Component<any, any> {
