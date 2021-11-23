@@ -11,8 +11,27 @@ import PageNotFound from 'PageNotFound';
 import {CodeBlock, dracula, googlecode} from 'react-code-blocks';
 import OrbDefence from "./examples/OrbDefence";
 import ClickedPoints from "./examples/ClickedPoints";
+import ExampleList from "./examples/ExampleList";
+import ColoredPoints from "./examples/ColoredPoints";
+import MultiPoint from "./examples/MultiPoint";
+import HelloTriangle from "./examples/HelloTriangle";
+import HelloTriangleLines from "./examples/HelloTriangleLines";
+import HelloTriangleStrip from "./examples/HelloTriangleStrip";
+import HelloTriangleLoop from "./examples/HelloTriangleLoop";
+import HelloQuad from "./examples/HelloQuad";
+import HelloQuadFan from "./examples/HelloQuadFan";
+import RotatedTriangle from "./examples/RotatedTriangle";
+import RotatedTriangleMatrix from "./examples/RotatedTriangleMatrix";
+import ScaledTriangleMatrix from "./examples/ScaledTriangleMatrix";
+import RotatedTranslatedTriangle from "./examples/RotatedTranslatedTriangle";
 
-
+export interface iCustomRoute {
+    component?: any,
+    name?: string,
+    path: string,
+    pathTo?: string,
+    redirect?: boolean
+}
 
 class bootstrap extends Component<any, {
     axios: AxiosInstance,
@@ -460,26 +479,81 @@ class bootstrap extends Component<any, {
         const {alert} = this.state;
 
         // Routes that belong to the public and private sector
-        let Routes = [
+        let Routes : iCustomRoute[] = [
+            {
+                path: "/Multi",
+                name: "Multi-Point",
+                component: MultiPoint
+            },
             {
                 path: "/ClickedPoints",
                 name: "Clicked Points",
                 component: ClickedPoints
             },
             {
+                path: "/Colored",
+                name: "Colored Points",
+                component: ColoredPoints
+            },{
+                path: "/HelloTriangle",
+                name: "HelloTriangle",
+                component: HelloTriangle
+            },{
+                path: "/HelloTriangleLines",
+                name: "HelloTriangleLines",
+                component: HelloTriangleLines
+            },{
+                path: "/HelloTriangleStrip",
+                name: "HelloTriangleStrip",
+                component: HelloTriangleStrip
+            },{
+                path: "/HelloTriangleLoop",
+                name: "HelloTriangleLoop",
+                component: HelloTriangleLoop
+            },{
+                path: "/HelloQuad",
+                name: "HelloQuad",
+                component: HelloQuad
+            },{
+                path: "/HelloQuadFan",
+                name: "HelloQuadFan",
+                component: HelloQuadFan
+            },{
+                path: "/RotatedTriangle",
+                name: "RotatedTriangle",
+                component: RotatedTriangle
+            },{
+                path: "/RotatedTriangleMatrix",
+                name: "RotatedTriangleMatrix",
+                component: RotatedTriangleMatrix
+            },{
+                path: "/ScaledTriangleMatrix",
+                name: "ScaledTriangleMatrix",
+                component: ScaledTriangleMatrix
+            },{
+                path: "/RotatedTranslatedTriangle",
+                name: "RotatedTranslatedTriangle",
+                component: RotatedTranslatedTriangle
+            },
+            {
                 path: "/orb",
-                name: "Play Like The Pro's",
+                name: "Orb Defence",
                 component: OrbDefence
             },
             {
+                path: "/ExampleList",
+                name: "Example List",
+                component: ExampleList
+            },
+            {
                 path: "/",
-                pathTo: "/orb",
+                pathTo: "/ExampleList",
                 redirect: true
             },
         ];
 
         return <>
-            {this.subRoutingSwitch(Routes, {})}
+            {this.subRoutingSwitch(Routes, {Routes})}
             {alert}
         </>;
     }
