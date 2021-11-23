@@ -1,3 +1,43 @@
+# Overview
+* Compiling an open source react sample to illustrate and teach FUNDAMENTAL graphics and game programming. 
+* Samples should be self-contained 
+* Libraries maybe used; however a focus on Matrix (Cartesian or Polar Graph Based) ops is priority.
+  * For n00ds this just means we use [ x, y, z ] -> and other matricies (arrays).
+  * For bigger n00bs generally arrays are used to denote everything (element/models/people/cubes/spears/rain/trains/plains/you name it)
+  * Much like the text your reading now is stored fundamentally as 1's and 0's (binary); Generally, all graphics are made up of only points, lines, and triangles.
+  * If you have found the last two bullets inciteful, please read as well as these
+    * This is dense with information [computer-graphics](https://github.com/RichardTMiles/Books/blob/master/computer-graphics/Fundamentals%20of%20Computer%20Graphics%203rd%20ed.%20-%20P.%20Shirley%2C%20S.%20Marschner%20(CRC%2C%202009)%20WW.pdf) jumping to why is page ~134. 
+    * Though the foundations you will need start on page one. 
+    * Another book [which has heavy focus on math](https://github.com/RichardTMiles/Books/blob/master/computer-graphics/fundamentalsOfGraphics.pdf)
+* Generally these [examples follow this resource](https://sites.google.com/site/webglbook/home/chapter-1)
+  * if you are using this as a learning tool please open this link to see a general guideline to moving through the files. 
+  * This repository aims to improve these samples in react + more real world applications.
+
+## This game template is designed to run fully on the client's browser. 
+* Axios is pre-configured to support server side apps. 
+* Be sure you have the latest version of [node](https://nodejs.org/en/) installed. 
+* `brew` and `choco`  can be used to install node on [mac](https://brew.sh/) and [windows](https://chocolatey.org/install) respectively
+* Legacy systems which do not support the new ssl standard may use `npm run start:legacy`. Please do not use this unless necessary.
+
+# Installation and First Run
+Clone this repository!
+
+    git clone https://github.com/Drop-In-Gaming/WebGL-React-Starter-Template.git ~/WebGL-React-Starter-Template
+    
+
+Change directory into the root of this repository.
+    
+    cd ~/WebGL-React-Starter-Template
+
+Install the 3rd party packages using npm (node).
+
+    npm install 
+
+Run the samples!
+
+    npm run start
+
+
 # Orb Defence 
 
 General concept is to store the whole games as a grid of boxes; an array 
@@ -5,49 +45,7 @@ General concept is to store the whole games as a grid of boxes; an array
 Based on the video the lanes total  [36][x] where x is easily over 100, but
 I have not counted. The top and bottom of the actual game reserved for 
 making the border; so the ~ playable game is really only 34 in length. 
-So removing top and bottom border lets mock this below.
 
-
-
-Grid is                          36 X 
-
-G 2 RE of Top Box                36  x  25
-
-                                        29 - 35        
-                                
-To edge of (Orb) Base block out   36 X 55 
-
-
-
-Grid to FB                       36 X 
-
-Orb Bases are                     5 X 4
-
-
-
-
-
-
-this is rought
-```
-[
-    0: [,,,,,,,,,,,,,,,,,,|,,,,,|,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],
-    1: [,,,,,,,,,,,,,,,,,,|,,,,,|,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],
-    2: [,,,,,,,,,,,,,,,_,,|_____,, ,___________________________],
-    3: [,,,,,,,,,_______,,,,,,,,,,,|,,,,,,,,,,,,,,,,,,,,,,,,,,],
-    4: [,,,,,,,,,,,,,,,|,,,,,,,,,,,|,,,,,,,,,,,,,,,,,,,,,,,,,,],
-    5: [,,,,,,,,,,,,,,,|,,,,,,,,,,,---------------------*****,],
-    6: [,,,,,,,,,,,,,,,|,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*****,],
-    7: [,,,,,,,,,,,----|,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*****,],
-    8: [,,,,,,,,,,,,,,,,,,,,,,,,,,,---------------------*****,],
-    9: [,,,,,,,,,,,,,,,,,,,,,,,,,,|,,,,,,,,,,,,,,,,,,,,,,,,,,,],
-   10: [,,,,,,_________|,,,,,,,,,,,---------------------------],
-   11: [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],
-   12: [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],
-   13: [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],
-   14: [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],
-]
-```
 
 ## Terminology 
 
