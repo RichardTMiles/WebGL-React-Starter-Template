@@ -53,7 +53,7 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
         // Write the positions of vertices to a vertex shader
         var n = this.initVertexBuffers(gl);
 
-        if (n < 0) {
+        if (n === false || n < 0) {
             console.log('Failed to set the positions of the vertices');
             return;
         }

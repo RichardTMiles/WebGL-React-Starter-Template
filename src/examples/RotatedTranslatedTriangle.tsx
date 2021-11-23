@@ -38,18 +38,18 @@ export default class RotatedTranslatedTriangle extends Component<any, any> {
             return;
         }
 
-        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE)
 
         // Initialize shaders
         if (!program) {
-            console.log('Failed to initialize shaders.');
+            console.log('Failed to intialize shaders.');
             return;
         }
 
         // Write the positions of vertices to a vertex shader
         var n = this.initVertexBuffers(gl);
 
-        if (n < 0) {
+        if (n === false || n < 0) {
             console.log('Failed to set the positions of the vertices');
             return;
         }
@@ -59,21 +59,16 @@ export default class RotatedTranslatedTriangle extends Component<any, any> {
 
         // Calculate a model matrix
         var ANGLE = 60.0; // The rotation angle
-
         var Tx = 0.5;     // Translation distance
-
         modelMatrix.setRotate(ANGLE, 0, 0, 1);  // Set rotation matrix
-
         modelMatrix.translate(Tx, 0, 0);        // Multiply modelMatrix by the calculated translation matrix
 
         // Pass the model matrix to the vertex shader
         var u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix');
-
         if (!u_ModelMatrix) {
             console.log('Failed to get the storage location of u_xformMatrix');
             return;
         }
-
         gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
 
         // Specify the color for clearing <canvas>
@@ -88,32 +83,27 @@ export default class RotatedTranslatedTriangle extends Component<any, any> {
 
     initVertexBuffers(gl) {
         var vertices = new Float32Array([
-            -0.5, 0.5,   -0.5, -0.5,   0.5, 0.5,　0.5, -0.5
+            0, 0.3,   -0.3, -0.3,   0.3, -0.3
         ]);
-
-        var n = 4; // The number of vertices
+        var n = 3; // The number of vertices
 
         // Create a buffer object
         var vertexBuffer = gl.createBuffer();
-
         if (!vertexBuffer) {
             console.log('Failed to create the buffer object');
-            return -1;
+            return false;
         }
 
         // Bind the buffer object to target
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
         var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
-
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
             return -1;
         }
-
         // Assign the buffer object to a_Position variable
         gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
 
