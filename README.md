@@ -7,8 +7,8 @@
   * Much like the text your reading now is stored fundamentally as 1's and 0's (binary); Generally, all graphics are made up of only points, lines, and triangles.
   * If you have found the last two bullets inciteful, please read as well as these
     * This is dense with information [computer-graphics](https://github.com/RichardTMiles/Books/blob/master/computer-graphics/Fundamentals%20of%20Computer%20Graphics%203rd%20ed.%20-%20P.%20Shirley%2C%20S.%20Marschner%20(CRC%2C%202009)%20WW.pdf) jumping to why is page ~134. 
-    * Though the foundations you will need start on page one. 
-    * Another book [which has heavy focus on math](https://github.com/RichardTMiles/Books/blob/master/computer-graphics/fundamentalsOfGraphics.pdf)
+    * Though the foundations you will need start on page one. The author Matsuda, K. and Lea, R.  seems to appear in my texts and codes involving WebGL using the foundations we will take to practice. Thanks to those who pave roads before us.
+    * Another book [which has heavy focus on math](https://github.com/RichardTMiles/Books/blob/master/computer-graphics/fundamentalsOfGraphics.pdf) which might be more preferred for those not well versed in Mathematics.
 * Generally these [examples follow this resource](https://sites.google.com/site/webglbook/home/chapter-1)
   * if you are using this as a learning tool please open this link to see a general guideline to moving through the files. 
   * This repository aims to improve these samples in react + more real world applications.
@@ -33,7 +33,7 @@ Install the 3rd party packages using npm (node).
 
     npm install 
 
-Run the samples!
+Run the samples! This will automatically open your browser to [http://127.0.0.1:3000/](http://127.0.0.1:3000/) 
 
     npm run start
 
