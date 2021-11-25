@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
+import {getWebGLContext} from "assets/js/cuon-utils"
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
 export default class RotatedTriangleMatrix extends Component<any, any> {
@@ -32,21 +32,11 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
     // @link http://rodger.global-linguist.com/webgl/ch03/RotatedTriangle.html
     componentDidMount() {
 
-        // Retrieve <canvas> element
-        var canvas = document.getElementById('webgl');
-
         // Get the rendering context for WebGL
-        var gl = getWebGLContext(canvas);
+        var gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+
         if (!gl) {
             console.log('Failed to get the rendering context for WebGL');
-            return;
-        }
-
-        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
-
-        // Initialize shaders
-        if (!program) {
-            console.log('Failed to intialize shaders.');
             return;
         }
 
@@ -72,7 +62,7 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
         ]);
 
         // Pass the rotation matrix to the vertex shader
-        var u_xformMatrix = gl.getUniformLocation(program, 'u_xformMatrix');
+        var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
 
         if (!u_xformMatrix) {
             console.log('Failed to get the storage location of u_xformMatrix');

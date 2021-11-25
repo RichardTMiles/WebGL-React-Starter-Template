@@ -12,6 +12,9 @@ const hist = createBrowserHistory();
 
 const APP_ROOT = process.cwd();
 
+
+// @link https://sites.google.com/site/webglbook/home
+// @link https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
 ReactDOM.render(
     <Router history={hist}>
         <Bootstrap/>

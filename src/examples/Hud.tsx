@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {getWebGLContext, initShaders} from "../assets/js/cuon-utils";
+import {getWebGLContext} from "../assets/js/cuon-utils";
 import {Matrix4} from "../assets/js/cuon-matrix";
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
@@ -41,36 +41,22 @@ export default class Hud extends Component<any, any> {
     ANGLE_STEP = 20.0;
 
     componentDidMount() {
+        // Get the rendering context for WebGL
+        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
         // Retrieve <canvas> element
-        const canvas : HTMLCanvasElement | null = document.getElementById('webgl') as HTMLCanvasElement;
+        const hud: HTMLCanvasElement | null = document.getElementById('hud') as HTMLCanvasElement;
 
-        const hud : HTMLCanvasElement | null = document.getElementById('hud') as HTMLCanvasElement;
-
-        if (!canvas || !hud) {
-
+        if (!hud) {
             console.log('Failed to get HTML elements');
-
             return false;
-
         }
-
-        // Get the rendering context for WebGL
-        const gl = getWebGLContext(canvas);
 
         // Get the rendering context for 2DCG
         const ctx = hud.getContext('2d');
 
-        if (!gl || !ctx) {
+        if (!ctx) {
             console.log('Failed to get rendering context');
-            return;
-        }
-
-        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
-
-        // Initialize shaders
-        if (!program) {
-            console.log('Failed to intialize shaders.');
             return;
         }
 
@@ -88,9 +74,9 @@ export default class Hud extends Component<any, any> {
         gl.enable(gl.DEPTH_TEST);
 
         // Get the storage locations of uniform variables
-        const u_MvpMatrix = gl.getUniformLocation(program, 'u_MvpMatrix');
+        const u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
 
-        const u_Clicked = gl.getUniformLocation(program, 'u_Clicked');
+        const u_Clicked = gl.getUniformLocation(gl.program, 'u_Clicked');
 
         if (!u_MvpMatrix || !u_Clicked) {
             console.log('Failed to get the storage location of uniform variables');
@@ -255,52 +241,82 @@ export default class Hud extends Component<any, any> {
     }
 
     draw2D = (ctx, currentAngle) => {
+
         ctx.clearRect(0, 0, 400, 400); // Clear <hud>
+
         // Draw triangle with white lines
         ctx.beginPath();                      // Start drawing
-        ctx.moveTo(120, 10); ctx.lineTo(200, 150); ctx.lineTo(40, 150);
+
+        ctx.moveTo(120, 10);
+        ctx.lineTo(200, 150);
+        ctx.lineTo(40, 150);
+
         ctx.closePath();
+
         ctx.strokeStyle = 'rgba(255, 255, 255, 1)'; // Set white to color of lines
+
         ctx.stroke();                           // Draw Triangle with white lines
+
         // Draw white letters
         ctx.font = '18px "Times New Roman"';
+
         ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
+
         ctx.fillText('HUD: Head Up Display', 40, 180);
+
         ctx.fillText('Triangle is drawn by Canvas 2D API.', 40, 200);
+
         ctx.fillText('Cube is drawn by WebGL API.', 40, 220);
-        ctx.fillText('Current Angle: '+ Math.floor(currentAngle), 40, 240);
+
+        ctx.fillText('Current Angle: ' + Math.floor(currentAngle), 40, 240);
+
     }
 
     last = Date.now(); // Last time that this function was called
 
     animate = (angle) => {
+
         const now = Date.now();   // Calculate the elapsed time
+
         const elapsed = now - this.last;
+
         this.last = now;
+
         // Update the current rotation angle (adjusted by the elapsed time)
         const newAngle = angle + (this.ANGLE_STEP * elapsed) / 1000.0;
+
         return newAngle % 360;
+
     }
 
     initArrayBuffer = (gl, data, num, type, attribute) => {
+
         // Create a buffer object
         const buffer = gl.createBuffer();
+
         if (!buffer) {
             console.log('Failed to create the buffer object');
             return false;
         }
+
         // Write date into the buffer object
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
         gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+
         // Assign the buffer object to the attribute variable
         const a_attribute = gl.getAttribLocation(gl.program, attribute);
+
         if (a_attribute < 0) {
             console.log('Failed to get the storage location of ' + attribute);
             return false;
         }
+
         gl.vertexAttribPointer(a_attribute, num, type, false, 0, 0);
+
         // Enable the assignment of the buffer object to the attribute variable
         gl.enableVertexAttribArray(a_attribute);
+
         // Unbind the buffer object
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
@@ -312,10 +328,12 @@ export default class Hud extends Component<any, any> {
         return (
             <>
                 {/** @link https://algassert.com/quirk# */}
-                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight} style={{position: "absolute", zIndex: 0}}>
+                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}
+                        style={{position: "absolute", zIndex: 0}}>
                     Please use a browser that supports "canvas"
                 </canvas>
-                <canvas id="hud" width={window.innerWidth} height={window.innerHeight} style={{position: "absolute", zIndex: 1}}/>
+                <canvas id="hud" width={window.innerWidth} height={window.innerHeight}
+                        style={{position: "absolute", zIndex: 1}}/>
             </>
         );
     }

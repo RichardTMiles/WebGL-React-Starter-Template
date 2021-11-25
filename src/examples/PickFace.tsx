@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {Matrix4} from "assets/js/cuon-matrix";
-import {getWebGLContext, iWebGLRenderingContext} from "assets/js/cuon-utils";
+import {getWebGLContext} from "../assets/js/cuon-utils";
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
-export default class OrbDefence extends Component<any, any> {
+export default class PickFace extends Component<any, any> {
     constructor(props) {
         super(props);
         // we use this to make the card to appear after the page has been rendered
@@ -48,18 +48,7 @@ export default class OrbDefence extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl : iWebGLRenderingContext = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
-
-        // Retrieve <canvas> element
-        const hud : HTMLCanvasElement | null = document.getElementById('hud') as HTMLCanvasElement;
-
-        // Get the rendering context for 2DCG
-        const ctx: CanvasRenderingContext2D | null  = hud.getContext('2d');
-
-        if (!gl || !ctx) {
-            console.log('Failed to get rendering context');
-            return;
-        }
+        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
         // Set the vertex information
         const n = this.initVertexBuffers(gl);
@@ -75,20 +64,17 @@ export default class OrbDefence extends Component<any, any> {
         gl.enable(gl.DEPTH_TEST);
 
         // Get the storage locations of uniform variables
-        const u_MvpMatrix : WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
+        const u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
 
-        const u_PickedFace : WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_PickedFace');
+        const u_PickedFace = gl.getUniformLocation(gl.program, 'u_PickedFace');
 
         if (!u_MvpMatrix || !u_PickedFace) {
-
             console.log('Failed to get the storage location of uniform variable');
-
             return;
-
         }
 
         // Calculate the view projection matrix
-        const viewProjMatrix : Matrix4 = new Matrix4(undefined);
+        const viewProjMatrix = new Matrix4(undefined);
 
         viewProjMatrix.setPerspective(30.0, window.innerWidth / window.innerHeight, 1.0, 100.0);
 
@@ -98,20 +84,19 @@ export default class OrbDefence extends Component<any, any> {
         gl.uniform1i(u_PickedFace, -1);
 
         // Register the event handler
-        hud.onmousedown = (ev : MouseEvent) => {   // Mouse is pressed
+        gl.canvas.onmousedown = (ev) => {   // Mouse is pressed
 
             const target = ev.target as HTMLElement;
 
-            const x : number = ev.clientX,
-                y : number = ev.clientY;
+            const x = ev.clientX,
+                y = ev.clientY;
 
             const rect = target.getBoundingClientRect();
 
             if (rect.left <= x && x < rect.right && rect.top <= y && y < rect.bottom) {
 
                 // If Clicked position is inside the <canvas>, update the selected surface
-                const x_in_canvas : number = x - rect.left,
-                    y_in_canvas : number = rect.bottom - y;
+                const x_in_canvas = x - rect.left, y_in_canvas = rect.bottom - y;
 
                 const face = this.checkFace(gl, n, x_in_canvas, y_in_canvas, this.currentAngle, u_PickedFace, viewProjMatrix, u_MvpMatrix);
 
@@ -127,8 +112,6 @@ export default class OrbDefence extends Component<any, any> {
 
             this.currentAngle = this.animate(this.currentAngle);
 
-            this.draw2D(ctx, this.currentAngle); // Draw 2D
-
             this.draw(gl, n, this.currentAngle, viewProjMatrix, u_MvpMatrix);
 
             requestAnimationFrame(tick);
@@ -139,7 +122,8 @@ export default class OrbDefence extends Component<any, any> {
 
     }
 
-    initVertexBuffers = (gl : WebGLRenderingContext) : number => {
+
+    initVertexBuffers = (gl) => {
         // Create a cube
         //    v6----- v5
         //   /|      /|
@@ -193,17 +177,11 @@ export default class OrbDefence extends Component<any, any> {
         }
 
         // Write vertex information to buffer object
-        if (!this.initArrayBuffer(gl, vertices, gl.FLOAT, 3, 'a_Position')) {
-            return -1;// Coordinates Information
-        }
+        if (!this.initArrayBuffer(gl, vertices, gl.FLOAT, 3, 'a_Position')) return -1; // Coordinates Information
 
-        if (!this.initArrayBuffer(gl, colors, gl.FLOAT, 3, 'a_Color')) {
-            return -1;// Color Information
-        }
+        if (!this.initArrayBuffer(gl, colors, gl.FLOAT, 3, 'a_Color')) return -1;      // Color Information
 
-        if (!this.initArrayBuffer(gl, faces, gl.UNSIGNED_BYTE, 1, 'a_Face')) {
-            return -1;// Surface Information
-        }
+        if (!this.initArrayBuffer(gl, faces, gl.UNSIGNED_BYTE, 1, 'a_Face')) return -1;// Surface Information
 
         // Unbind the buffer object
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -217,62 +195,28 @@ export default class OrbDefence extends Component<any, any> {
 
     }
 
-    checkFace = (gl, n, x, y, currentAngle, u_PickedFace, viewProjMatrix : Matrix4, u_MvpMatrix) => {
-
+    checkFace = (gl, n, x, y, currentAngle, u_PickedFace, viewProjMatrix, u_MvpMatrix) => {
         const pixels = new Uint8Array(4); // Array for storing the pixel value
-
         gl.uniform1i(u_PickedFace, 0);  // Draw by writing surface number into alpha value
-
         this.draw(gl, n, currentAngle, viewProjMatrix, u_MvpMatrix);
-
         // Read the pixel value of the clicked position. pixels[3] is the surface number
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
         return pixels[3];
-
     }
 
     g_MvpMatrix = new Matrix4(undefined); // Model view projection matrix
 
     draw = (gl, n, currentAngle, viewProjMatrix, u_MvpMatrix) => {
-        // Calculate The model view projection matrix and pass it to u_MvpMatrix
+        // Caliculate The model view projection matrix and pass it to u_MvpMatrix
         this.g_MvpMatrix.set(viewProjMatrix);
         this.g_MvpMatrix.rotate(currentAngle, 1.0, 0.0, 0.0); // Rotate appropriately
         this.g_MvpMatrix.rotate(currentAngle, 0.0, 1.0, 0.0);
         this.g_MvpMatrix.rotate(currentAngle, 0.0, 0.0, 1.0);
         gl.uniformMatrix4fv(u_MvpMatrix, false, this.g_MvpMatrix.elements);
+
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     // Clear buffers
         gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);   // Draw
-    }
-
-    draw2D = (ctx, currentAngle) => {
-
-        ctx.clearRect(0, 0, 400, 400); // Clear <hud>
-
-        // Draw triangle with white lines
-        ctx.beginPath();                      // Start drawing
-
-        ctx.moveTo(120, 10); ctx.lineTo(200, 150); ctx.lineTo(40, 150);
-
-        ctx.closePath();
-
-        ctx.strokeStyle = 'rgba(255, 255, 255, 1)'; // Set white to color of lines
-
-        ctx.stroke();                           // Draw Triangle with white lines
-
-        // Draw white letters
-        ctx.font = '18px "Times New Roman"';
-
-        ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
-
-        ctx.fillText('HUD: Head Up Display', 40, 180);
-
-        ctx.fillText('Triangle is drawn by Canvas 2D API.', 40, 200);
-
-        ctx.fillText('Cube is drawn by WebGL API.', 40, 220);
-
-        ctx.fillText('Current Angle: '+ Math.floor(currentAngle), 40, 240);
-
     }
 
     last = Date.now();  // Last time that this function was called
@@ -320,9 +264,6 @@ export default class OrbDefence extends Component<any, any> {
         // Enable the assignment to a_attribute variable
         gl.enableVertexAttribArray(a_attribute);
 
-        // Unbind the buffer object
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
         return true;
     }
 
@@ -333,8 +274,7 @@ export default class OrbDefence extends Component<any, any> {
             <div>
                 <h4>Orb Defence</h4>
                 {/** @link https://algassert.com/quirk# */}
-                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight} style={{position: "absolute", zIndex: 0}}/>
-                <canvas id="hud" width={window.innerWidth} height={window.innerHeight} style={{position: "absolute", zIndex: 1}}/>
+                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
             </div>
         );
     }

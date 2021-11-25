@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
+import {getWebGLContext} from "assets/js/cuon-utils"
 
 export default class ColoredPoints extends Component<any, {
     x: number,
@@ -34,50 +34,34 @@ export default class ColoredPoints extends Component<any, {
         '}\n';
 
     componentDidMount() {
-        // Retrieve <canvas> element
-        const canvas = document.getElementById('webgl');
-
-        if (null === canvas) {
-
-            alert('Failed to get canvas element');
-
-            return;
-
-        }
-
+        
         // Get the rendering context for WebGL
-        const gl = getWebGLContext(canvas);
+        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
         if (!gl) {
             console.log('Failed to get the rendering context for WebGL');
             return;
         }
 
-        // Initialize shaders
-        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
-
-        if (!program) {
-            console.log('Failed to intialize shaders.');
-            return;
-        }
-
         // // Get the storage location of a_Position
-        const a_Position = gl.getAttribLocation(program, 'a_Position');
+        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
             return;
         }
 
         // Get the storage location of u_FragColor
-        const u_FragColor = gl.getUniformLocation(program, 'u_FragColor');
+        const u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
+
         if (!u_FragColor) {
             console.log('Failed to get the storage location of u_FragColor');
             return;
         }
 
         // Register function (event handler) to be called on a mouse press
-        canvas.onmousedown = (ev) => {
-            this.click(ev, gl, canvas, a_Position, u_FragColor)
+        gl.canvas.onmousedown = (ev) => {
+            this.click(ev, gl, gl.canvas, a_Position, u_FragColor)
         };
 
         // Specify the color for clearing <canvas>
@@ -93,8 +77,11 @@ export default class ColoredPoints extends Component<any, {
     g_colors: number[][] = [];  // The array to store the color of a point
 
     click(ev, gl, canvas, a_Position, u_FragColor) {
+
         let x = ev.clientX; // x coordinate of a mouse pointer
+
         let y = ev.clientY; // y coordinate of a mouse pointer
+
         const rect = ev.target.getBoundingClientRect();
 
         x = ((x - rect.left) - canvas.width / 2) / (canvas.width / 2);

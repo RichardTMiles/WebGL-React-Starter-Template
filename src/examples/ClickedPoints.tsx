@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
+import {getWebGLContext} from "assets/js/cuon-utils"
 
 export default class ClickedPoints extends Component<any, {
     x: number,
@@ -37,35 +37,11 @@ export default class ClickedPoints extends Component<any, {
     // @link http://rodger.global-linguist.com/webgl/ch02/ClickedPoints.html
     componentDidMount() {
 
-        // Retrieve <canvas> element
-        const canvas = document.getElementById('webgl');
-
-        if (null === canvas) {
-
-            alert('Failed to find the canvas element on the page!')
-
-            return;
-
-        }
-
         // Get the rendering context for WebGL
-        const gl = getWebGLContext(canvas);
+        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
-        if (!gl) {
-            console.log('Failed to get the rendering context for WebGL');
-            return;
-        }
-
-        // Initialize shaders
-        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
-
-        if (!program) {
-            console.log('Failed to initialize shaders.');
-            return;
-        }
-        
         // // Get the storage location of a_Position
-        const a_Position = gl.getAttribLocation(program, 'a_Position');
+        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
 
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
@@ -73,8 +49,8 @@ export default class ClickedPoints extends Component<any, {
         }
 
         // Register function (event handler) to be called on a mouse press
-        canvas.onmousedown = (ev) => {
-            this.click(ev, gl, canvas, a_Position);
+        gl.canvas.onmousedown = (ev) => {
+            this.click(ev, gl, gl.canvas, a_Position);
         };
 
         // Specify the color for clearing <canvas>

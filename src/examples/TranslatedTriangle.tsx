@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
-import { Matrix4 } from "assets/js/cuon-matrix";
+import {getWebGLContext} from "assets/js/cuon-utils"
+import {Matrix4} from "assets/js/cuon-matrix";
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
 export default class RotatedTriangleMatrix extends Component<any, any> {
@@ -32,26 +32,11 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
 
     // @link http://rodger.global-linguist.com/webgl/ch03/RotatedTriangle.html
     componentDidMount() {
-// Retrieve <canvas> element
-        var canvas = document.getElementById('webgl');
-
         // Get the rendering context for WebGL
-        var gl = getWebGLContext(canvas);
-        if (!gl) {
-            console.log('Failed to get the rendering context for WebGL');
-            return;
-        }
-
-        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE)
-
-        // Initialize shaders
-        if (!program) {
-            console.log('Failed to intialize shaders.');
-            return;
-        }
+        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
         // Write the positions of vertices to a vertex shader
-        var n = this.initVertexBuffers(gl);
+        const n = this.initVertexBuffers(gl);
 
         if (false === n || n < 0) {
             console.log('Failed to set the positions of the vertices');
@@ -59,20 +44,25 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
         }
 
         // Create Matrix4 object for model transformation
-        var modelMatrix = new Matrix4(undefined);
+        const modelMatrix = new Matrix4(undefined);
 
         // Calculate a model matrix
-        var ANGLE = 60.0; // The rotation angle
-        var Tx = 0.5;     // Translation distance
+        const ANGLE = 60.0; // The rotation angle
+
+        const Tx = 0.5;     // Translation distance
+
         modelMatrix.setRotate(ANGLE, 0, 0, 1);  // Set rotation matrix
+
         modelMatrix.translate(Tx, 0, 0);        // Multiply modelMatrix by the calculated translation matrix
 
         // Pass the model matrix to the vertex shader
-        var u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix');
+        const u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+
         if (!u_ModelMatrix) {
             console.log('Failed to get the storage location of u_xformMatrix');
             return;
         }
+
         gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
 
         // Specify the color for clearing <canvas>
@@ -87,13 +77,16 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
     }
 
     initVertexBuffers(gl) {
-        var vertices = new Float32Array([
-            0, 0.3,   -0.3, -0.3,   0.3, -0.3
+
+        const vertices = new Float32Array([
+            0, 0.3, -0.3, -0.3, 0.3, -0.3
         ]);
-        var n = 3; // The number of vertices
+
+        const n = 3; // The number of vertices
 
         // Create a buffer object
-        var vertexBuffer = gl.createBuffer();
+        const vertexBuffer = gl.createBuffer();
+
         if (!vertexBuffer) {
             console.log('Failed to create the buffer object');
             return false;
@@ -101,14 +94,17 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
 
         // Bind the buffer object to target
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-        var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
             return -1;
         }
+
         // Assign the buffer object to a_Position variable
         gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
 
@@ -116,6 +112,7 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
         gl.enableVertexAttribArray(a_Position);
 
         return n;
+
     }
 
 

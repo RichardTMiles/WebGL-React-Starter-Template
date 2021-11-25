@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
+import {getWebGLContext} from "assets/js/cuon-utils"
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
 export default class HelloQuad extends Component<any, any> {
@@ -27,21 +27,8 @@ export default class HelloQuad extends Component<any, any> {
 
     componentDidMount() {
 
-        // Retrieve <canvas> element
-        var canvas = document.getElementById('webgl');
-
         // Get the rendering context for WebGL
-        var gl = getWebGLContext(canvas);
-        if (!gl) {
-            console.log('Failed to get the rendering context for WebGL');
-            return;
-        }
-
-        // Initialize shaders
-        if (!initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE)) {
-            console.log('Failed to intialize shaders.');
-            return;
-        }
+        var gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
         // Write the positions of vertices to a vertex shader
         var n = this.initVertexBuffers(gl);
@@ -59,6 +46,7 @@ export default class HelloQuad extends Component<any, any> {
 
         // Draw the rectangle
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+
     }
 
     initVertexBuffers(gl) {
@@ -83,6 +71,7 @@ export default class HelloQuad extends Component<any, any> {
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
         var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
             return -1;

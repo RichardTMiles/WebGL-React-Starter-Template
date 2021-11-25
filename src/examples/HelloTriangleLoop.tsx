@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {getWebGLContext, initShaders} from "assets/js/cuon-utils"
+import {getWebGLContext} from "assets/js/cuon-utils"
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
 export default class HelloTriangleLoop extends Component<any, any> {
@@ -27,24 +27,16 @@ export default class HelloTriangleLoop extends Component<any, any> {
 
     componentDidMount() {
 
-        // Retrieve <canvas> element
-        var canvas = document.getElementById('webgl');
-
         // Get the rendering context for WebGL
-        var gl = getWebGLContext(canvas);
+        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+
         if (!gl) {
             console.log('Failed to get the rendering context for WebGL');
             return;
         }
 
-        // Initialize shaders
-        if (!initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE)) {
-            console.log('Failed to intialize shaders.');
-            return;
-        }
-
         // Write the positions of vertices to a vertex shader
-        var n = this.initVertexBuffers(gl);
+        const n = this.initVertexBuffers(gl);
 
         if (n < 0) {
             console.log('Failed to set the positions of the vertices');
@@ -59,16 +51,17 @@ export default class HelloTriangleLoop extends Component<any, any> {
 
         // Draw the rectangle
         gl.drawArrays(gl.LINE_LOOP, 0, n);
+
     }
 
     initVertexBuffers(gl) {
-        var vertices = new Float32Array([
-            0, 0.5,   -0.5, -0.5,   0.5, -0.5
+        const vertices = new Float32Array([
+            0, 0.5, -0.5, -0.5, 0.5, -0.5
         ]);
-        var n = 3; // The number of vertices
+        const n = 3; // The number of vertices
 
         // Create a buffer object
-        var vertexBuffer = gl.createBuffer();
+        const vertexBuffer = gl.createBuffer();
         if (!vertexBuffer) {
             console.log('Failed to create the buffer object');
             return -1;
@@ -79,7 +72,7 @@ export default class HelloTriangleLoop extends Component<any, any> {
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-        var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
             return -1;

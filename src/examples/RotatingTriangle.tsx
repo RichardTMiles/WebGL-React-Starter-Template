@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {getWebGLContext, initShaders} from "../assets/js/cuon-utils";
+import {getWebGLContext} from "../assets/js/cuon-utils";
 import { Matrix4 } from "assets/js/cuon-matrix";
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
@@ -30,29 +30,8 @@ export default class RotatingTriangle extends Component<any, any> {
     ANGLE_STEP = 45.0;
 
     componentDidMount() {
-        // Retrieve <canvas> element
-        var canvas = document.getElementById('webgl');
-
-        if (null === canvas) {
-            alert('Failed to find canvas');
-            return;
-        }
-
         // Get the rendering context for WebGL
-        var gl = getWebGLContext(canvas);
-
-        if (!gl) {
-            console.log('Failed to get the rendering context for WebGL');
-            return;
-        }
-
-        const program = initShaders(gl, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
-
-        // Initialize shaders
-        if (!program) {
-            console.log('Failed to intialize shaders.');
-            return;
-        }
+        var gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
         // Write the positions of vertices to a vertex shader
         var n = this.initVertexBuffers(gl);
@@ -66,7 +45,7 @@ export default class RotatingTriangle extends Component<any, any> {
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
         // Get storage location of u_ModelMatrix
-        var u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix');
+        var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
 
         if (!u_ModelMatrix) {
             console.log('Failed to get the storage location of u_ModelMatrix');

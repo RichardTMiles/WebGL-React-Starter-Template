@@ -27,6 +27,8 @@ import RotatedTranslatedTriangle from "./examples/RotatedTranslatedTriangle";
 import RotatingTriangle from "./examples/RotatingTriangle";
 import AudioThreeJS from "./examples/AudioThreeJS";
 import Hud from "./examples/Hud";
+import PickFace from "./examples/PickFace";
+import RotateObjectWithMouse from "./examples/RotateObjectWithMouse";
 
 export interface iCustomRoute {
     component?: any,
@@ -541,6 +543,14 @@ class bootstrap extends Component<any, {
                 path: "/RotatingTriangle",
                 name: "RotatingTriangle",
                 component: RotatingTriangle
+            },{
+                path: "/PickFace",
+                name: "PickFace",
+                component: PickFace
+            },{
+                path: "/RotateObjectWithMouse",
+                name: "RotateObjectWithMouse",
+                component: RotateObjectWithMouse
             },{
                 path: "/HUD",
                 name: "HUD",
