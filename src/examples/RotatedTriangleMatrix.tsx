@@ -13,6 +13,7 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
 
     // RotatedTriangle_Matrix.js (c) matsuda
     // Vertex shader program
+    // language=GLSL
     VSHADER_SOURCE =
         'attribute vec4 a_Position;\n' +
         'uniform mat4 u_xformMatrix;\n' +
@@ -21,6 +22,7 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
         '}\n';
 
     // Fragment shader program
+    // language=GLSL
     FSHADER_SOURCE =
         'void main() {\n' +
         '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' +

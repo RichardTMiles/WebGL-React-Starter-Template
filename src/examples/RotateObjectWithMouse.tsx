@@ -15,6 +15,7 @@ export default class RotateObjectWithMouse extends Component<any, any> {
 
     // ColoredPoint.js (c) 2012 matsuda
     // Vertex shader program
+    // language=GLSL
     VSHADER_SOURCE =
         'attribute vec4 a_Position;\n' +
         'attribute vec2 a_TexCoord;\n' +
@@ -26,6 +27,7 @@ export default class RotateObjectWithMouse extends Component<any, any> {
         '}\n';
 
     // Fragment shader program
+    // language=GLSL
     FSHADER_SOURCE =
         '#ifdef GL_ES\n' +
         'precision mediump float;\n' +

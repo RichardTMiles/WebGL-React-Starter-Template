@@ -13,6 +13,7 @@ export default class HelloTriangleStrip extends Component<any, any> {
 
     // ColoredPoint.js (c) 2012 matsuda
     // Vertex shader program
+    // language=GLSL
     VSHADER_SOURCE =
         'attribute vec4 a_Position;\n' +
         'void main() {\n' +
@@ -20,6 +21,7 @@ export default class HelloTriangleStrip extends Component<any, any> {
         '}\n';
 
     // Fragment shader program
+    // language=GLSL
     FSHADER_SOURCE =
         'void main() {\n' +
         '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' +

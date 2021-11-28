@@ -29,6 +29,7 @@ import AudioThreeJS from "./examples/AudioThreeJS";
 import Hud from "./examples/Hud";
 import PickFace from "./examples/PickFace";
 import RotateObjectWithMouse from "./examples/RotateObjectWithMouse";
+import JameshFisher from "./examples/GameOfLife/JameshFisher";
 
 export interface iCustomRoute {
     component?: any,
@@ -555,6 +556,10 @@ class bootstrap extends Component<any, {
                 path: "/HUD",
                 name: "HUD",
                 component: Hud
+            },{
+                path: "/GOL-JameshFisher",
+                name: "GOL-JameshFisher",
+                component: JameshFisher
             },{
                 path: "/AudioThreeJS",
                 name: "AudioThreeJS",

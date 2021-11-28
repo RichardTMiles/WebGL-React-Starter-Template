@@ -13,33 +13,35 @@ export default class OrbDefence extends Component<any, any> {
 
     // ColoredPoint.js (c) 2012 matsuda
     // Vertex shader program
-    VSHADER_SOURCE =
-        'attribute vec4 a_Position;\n' +
-        'attribute vec4 a_Color;\n' +
-        'attribute float a_Face;\n' +   // Surface number (Cannot use int for attribute variable)
-        'uniform mat4 u_MvpMatrix;\n' +
-        'uniform int u_PickedFace;\n' + // Surface number of selected face
-        'varying vec4 v_Color;\n' +
-        'void main() {\n' +
-        '  gl_Position = u_MvpMatrix * a_Position;\n' +
-        '  int face = int(a_Face);\n' + // Convert to int
-        '  vec3 color = (face == u_PickedFace) ? vec3(1.0) : a_Color.rgb;\n' +
-        '  if(u_PickedFace == 0) {\n' + // In case of 0, insert the face number into alpha
-        '    v_Color = vec4(color, a_Face/255.0);\n' +
-        '  } else {\n' +
-        '    v_Color = vec4(color, a_Color.a);\n' +
-        '  }\n' +
-        '}\n';
+    // language=GLSL
+    VSHADER_SOURCE = `
+        attribute vec4 a_Position;
+        attribute vec4 a_Color;
+        attribute float a_Face;// Surface number (Cannot use int for attribute variable)
+        uniform mat4 u_MvpMatrix;
+        uniform int u_PickedFace;// Surface number of selected face
+        varying vec4 v_Color;
+        void main() {
+            gl_Position = u_MvpMatrix * a_Position;
+            int face = int(a_Face);// Convert to int
+            vec3 color = (face == u_PickedFace) ? vec3(1.0) : a_Color.rgb;
+            if (u_PickedFace == 0) { // In case of 0, insert the face number into alpha
+                v_Color = vec4(color, a_Face/255.0);
+            } else {
+                v_Color = vec4(color, a_Color.a);
+            }
+        }`;
 
     // Fragment shader program
-    FSHADER_SOURCE =
-        '#ifdef GL_ES\n' +
-        'precision mediump float;\n' +
-        '#endif\n' +
-        'varying vec4 v_Color;\n' +
-        'void main() {\n' +
-        '  gl_FragColor = v_Color;\n' +
-        '}\n';
+    // language=GLSL
+    FSHADER_SOURCE = `
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+        varying vec4 v_Color;
+        void main() {
+            gl_FragColor = v_Color;
+        }`;
 
     ANGLE_STEP = 20.0; // Rotation angle (degrees/second)
 
@@ -48,13 +50,13 @@ export default class OrbDefence extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl : iWebGLRenderingContext = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl: iWebGLRenderingContext = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
         // Retrieve <canvas> element
-        const hud : HTMLCanvasElement | null = document.getElementById('hud') as HTMLCanvasElement;
+        const hud: HTMLCanvasElement | null = document.getElementById('hud') as HTMLCanvasElement;
 
         // Get the rendering context for 2DCG
-        const ctx: CanvasRenderingContext2D | null  = hud.getContext('2d');
+        const ctx: CanvasRenderingContext2D | null = hud.getContext('2d');
 
         if (!gl || !ctx) {
             console.log('Failed to get rendering context');
@@ -75,9 +77,9 @@ export default class OrbDefence extends Component<any, any> {
         gl.enable(gl.DEPTH_TEST);
 
         // Get the storage locations of uniform variables
-        const u_MvpMatrix : WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
+        const u_MvpMatrix: WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
 
-        const u_PickedFace : WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_PickedFace');
+        const u_PickedFace: WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_PickedFace');
 
         if (!u_MvpMatrix || !u_PickedFace) {
 
@@ -88,7 +90,7 @@ export default class OrbDefence extends Component<any, any> {
         }
 
         // Calculate the view projection matrix
-        const viewProjMatrix : Matrix4 = new Matrix4(undefined);
+        const viewProjMatrix: Matrix4 = new Matrix4(undefined);
 
         viewProjMatrix.setPerspective(30.0, window.innerWidth / window.innerHeight, 1.0, 100.0);
 
@@ -98,20 +100,20 @@ export default class OrbDefence extends Component<any, any> {
         gl.uniform1i(u_PickedFace, -1);
 
         // Register the event handler
-        hud.onmousedown = (ev : MouseEvent) => {   // Mouse is pressed
+        hud.onmousedown = (ev: MouseEvent) => {   // Mouse is pressed
 
             const target = ev.target as HTMLElement;
 
-            const x : number = ev.clientX,
-                y : number = ev.clientY;
+            const x: number = ev.clientX,
+                y: number = ev.clientY;
 
             const rect = target.getBoundingClientRect();
 
             if (rect.left <= x && x < rect.right && rect.top <= y && y < rect.bottom) {
 
                 // If Clicked position is inside the <canvas>, update the selected surface
-                const x_in_canvas : number = x - rect.left,
-                    y_in_canvas : number = rect.bottom - y;
+                const x_in_canvas: number = x - rect.left,
+                    y_in_canvas: number = rect.bottom - y;
 
                 const face = this.checkFace(gl, n, x_in_canvas, y_in_canvas, this.currentAngle, u_PickedFace, viewProjMatrix, u_MvpMatrix);
 
@@ -139,7 +141,7 @@ export default class OrbDefence extends Component<any, any> {
 
     }
 
-    initVertexBuffers = (gl : WebGLRenderingContext) : number => {
+    initVertexBuffers = (gl: WebGLRenderingContext): number => {
         // Create a cube
         //    v6----- v5
         //   /|      /|
@@ -217,7 +219,7 @@ export default class OrbDefence extends Component<any, any> {
 
     }
 
-    checkFace = (gl, n, x, y, currentAngle, u_PickedFace, viewProjMatrix : Matrix4, u_MvpMatrix) => {
+    checkFace = (gl, n, x, y, currentAngle, u_PickedFace, viewProjMatrix: Matrix4, u_MvpMatrix) => {
 
         const pixels = new Uint8Array(4); // Array for storing the pixel value
 
@@ -252,7 +254,9 @@ export default class OrbDefence extends Component<any, any> {
         // Draw triangle with white lines
         ctx.beginPath();                      // Start drawing
 
-        ctx.moveTo(120, 10); ctx.lineTo(200, 150); ctx.lineTo(40, 150);
+        ctx.moveTo(120, 10);
+        ctx.lineTo(200, 150);
+        ctx.lineTo(40, 150);
 
         ctx.closePath();
 
@@ -271,7 +275,7 @@ export default class OrbDefence extends Component<any, any> {
 
         ctx.fillText('Cube is drawn by WebGL API.', 40, 220);
 
-        ctx.fillText('Current Angle: '+ Math.floor(currentAngle), 40, 240);
+        ctx.fillText('Current Angle: ' + Math.floor(currentAngle), 40, 240);
 
     }
 
@@ -333,8 +337,10 @@ export default class OrbDefence extends Component<any, any> {
             <div>
                 <h4>Orb Defence</h4>
                 {/** @link https://algassert.com/quirk# */}
-                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight} style={{position: "absolute", zIndex: 0}}/>
-                <canvas id="hud" width={window.innerWidth} height={window.innerHeight} style={{position: "absolute", zIndex: 1}}/>
+                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}
+                        style={{position: "absolute", zIndex: 0}}/>
+                <canvas id="hud" width={window.innerWidth} height={window.innerHeight}
+                        style={{position: "absolute", zIndex: 1}}/>
             </div>
         );
     }

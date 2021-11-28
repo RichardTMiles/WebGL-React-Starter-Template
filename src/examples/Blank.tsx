@@ -11,11 +11,13 @@ export default class Blank extends Component<any, any> {
 
     // ColoredPoint.js (c) 2012 matsuda
     // Vertex shader program
+    // language=GLSL
     VSHADER_SOURCE =
         'void main() {\n' +
         '}\n';
 
     // Fragment shader program
+    // language=GLSL
     FSHADER_SOURCE =
         'void main() {\n' +
         '}\n';

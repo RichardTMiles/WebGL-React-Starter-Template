@@ -13,17 +13,19 @@ export default class HelloQuadFan extends Component<any, any> {
 
     // ColoredPoint.js (c) 2012 matsuda
     // Vertex shader program
-    VSHADER_SOURCE =
-        'attribute vec4 a_Position;\n' +
-        'void main() {\n' +
-        '  gl_Position = a_Position;\n' +
-        '}\n';
+    // language=GLSL
+    VSHADER_SOURCE = `
+        attribute vec4 a_Position;
+        void main() {
+          gl_Position = a_Position;
+        }`;
 
     // Fragment shader program
-    FSHADER_SOURCE =
-        'void main() {\n' +
-        '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' +
-        '}\n';
+    // language=GLSL
+    FSHADER_SOURCE = `
+        void main() {
+          gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }`;
 
     componentDidMount() {
 

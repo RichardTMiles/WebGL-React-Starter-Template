@@ -15,22 +15,24 @@ export default class ClickedPoints extends Component<any, {
         };
     }
 
-    g_points : Array<number> = []; // The array for the position of a mouse press
+    g_points: Array<number> = []; // The array for the position of a mouse press
 
     // ClickedPints.js (c) 2012 matsuda
     // Vertex shader program
-    VSHADER_SOURCE =
-        'attribute vec4 a_Position;\n' +
-        'void main() {\n' +
-        '  gl_Position = a_Position;\n' +
-        '  gl_PointSize = 10.0;\n' +
-        '}\n';
+    // language=GLSL
+    VSHADER_SOURCE = `
+        attribute vec4 a_Position;
+        void main() {
+            gl_Position = a_Position;
+            gl_PointSize = 10.0;
+        }`;
 
     // Fragment shader program
-    FSHADER_SOURCE =
-        'void main() {\n' +
-        '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' +
-        '}\n';
+    // language=GLSL
+    FSHADER_SOURCE = `
+        void main() {
+          gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }`;
 
 
     // @link https://sites.google.com/site/webglbook/home/chapter-2
@@ -78,7 +80,7 @@ export default class ClickedPoints extends Component<any, {
 
         this.g_points.push(y);
 
-        this.setState({x,y});
+        this.setState({x, y});
 
         // Clear <canvas>
         gl.clear(gl.COLOR_BUFFER_BIT);

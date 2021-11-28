@@ -18,23 +18,25 @@ export default class ColoredPoints extends Component<any, {
 
     // ColoredPoint.js (c) 2012 matsuda
     // Vertex shader program
-    VSHADER_SOURCE =
-        'attribute vec4 a_Position;\n' +
-        'void main() {\n' +
-        '  gl_Position = a_Position;\n' +
-        '  gl_PointSize = 10.0;\n' +
-        '}\n';
+    // language=GLSL
+    VSHADER_SOURCE = `
+        attribute vec4 a_Position;
+        void main() {
+          gl_Position = a_Position;
+          gl_PointSize = 10.0;
+        }`;
 
     // Fragment shader program
-    FSHADER_SOURCE =
-        'precision mediump float;\n' +
-        'uniform vec4 u_FragColor;\n' +  // uniform変数
-        'void main() {\n' +
-        '  gl_FragColor = u_FragColor;\n' +
-        '}\n';
+    // language=GLSL
+    FSHADER_SOURCE = `
+        precision mediump float;
+        uniform vec4 u_FragColor;// uniform変数
+        void main() {
+            gl_FragColor = u_FragColor;
+        }`;
 
     componentDidMount() {
-        
+
         // Get the rendering context for WebGL
         const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
@@ -90,7 +92,7 @@ export default class ColoredPoints extends Component<any, {
         // Store the coordinates to g_points array
         this.g_points.push([x, y]);
 
-        this.setState({x,y});
+        this.setState({x, y});
 
         // Store the coordinates to g_points array
         if (x >= 0.0 && y >= 0.0) {      // First quadrant
