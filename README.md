@@ -44,6 +44,7 @@ Run the samples! This will automatically open your browser to [http://127.0.0.1:
 # Resources 
 * [https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)](https://www.khronos.org/opengl/wiki/Data_Type_(GLSL))
 * [https://www.opengl.org//archives/resources/code/samples/redbook/](https://www.opengl.org//archives/resources/code/samples/redbook/)
+* [are functions in javascript tail call optimized?](https://stackoverflow.com/questions/37224520/are-functions-in-javascript-tail-call-optimized)
 
 # Deployment
 

@@ -23,9 +23,10 @@ import AudioThreeJS from "./examples/AudioThreeJS";
 import Hud from "./examples/Hud";
 import PickFace from "./examples/PickFace";
 import RotateObjectWithMouse from "./examples/RotateObjectWithMouse";
-import JameshFisher from "./examples/GameOfLife/JameshFisher";
+// import JameshFisher from "./examples/GameOfLife/JameshFisher";
 import Chaos from "./examples/Chaos";
 import Pendulum2 from "./examples/Pendulum2";
+import Bezier from "./examples/Bezier";
 
 
 
@@ -131,6 +132,10 @@ class WebGl extends Component<{ axios: AxiosInstance,
                 name: "Pendulum2",
                 component: Pendulum2
             },{
+                path: "/WebGl/Bezier",
+                name: "Bezier",
+                component: Bezier
+            },{
                 path: "/WebGl/PickFace",
                 name: "PickFace",
                 component: PickFace
@@ -142,11 +147,11 @@ class WebGl extends Component<{ axios: AxiosInstance,
                 path: "/WebGl/HUD",
                 name: "HUD",
                 component: Hud
-            },{
+            },/*{
                 path: "/WebGl/GOL-JameshFisher",
                 name: "GOL-JameshFisher",
                 component: JameshFisher
-            },{
+            },*/{
                 path: "/WebGl/AudioThreeJS",
                 name: "AudioThreeJS",
                 component: AudioThreeJS
