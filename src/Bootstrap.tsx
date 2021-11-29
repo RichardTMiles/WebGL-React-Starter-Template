@@ -588,23 +588,8 @@ class bootstrap extends Component<any, {
             }
         ];
 
-        if (false === this.state.isAppLocal) {
 
-            const publicURI = '/WebGL-React-Starter-Template';
-
-            Routes = Routes.map(value => {
-
-                return value?.pathTo ? {
-                    ...value,
-                    path: publicURI + value.path,
-                    pathTo: publicURI + value?.pathTo,
-                } : {
-                    ...value,
-                    path: publicURI + value.path
-                }
-            })
-
-        }
+        console.log(Routes)
 
         return <>
             {this.subRoutingSwitch(Routes, {Routes})}

@@ -56,7 +56,7 @@
     "start": "react-scripts start",
     "start:legacy": "react-scripts --openssl-legacy-provider start",
     "build:legacy": "PUBLIC_URL=/WebGL-React-Starter-Template/ react-scripts --openssl-legacy-provider build",
-    "build": "react-scripts build",
+    "build": "PUBLIC_URL=/WebGL-React-Starter-Template/ react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
