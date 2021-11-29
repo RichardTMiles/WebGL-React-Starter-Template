@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Drop-In Gaming FED",
   "private": true,
+  "homepage": "http://RichardTMiles.github.io/WebGL-React-Starter-Template",
   "main": "src/index.js",
   "dependencies": {
     "@sweetalert/with-react": "^0.1.1",
@@ -54,8 +55,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:legacy": "react-scripts --openssl-legacy-provider  start",
+    "start:legacy": "react-scripts --openssl-legacy-provider start",
+    "build:legacy": "react-scripts --openssl-legacy-provider build",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "eject": "exit 1; react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
@@ -91,6 +95,7 @@
     "@typescript-eslint/parser": "^3.10.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "gh-pages": "^3.2.3",
     "http-proxy-middleware": "^1.0.5",
     "prettier-eslint": "^12.0.0",
     "react-swipeable-views-utils": "^0.13.9",

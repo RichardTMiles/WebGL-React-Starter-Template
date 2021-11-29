@@ -2,6 +2,11 @@ import React, {Component} from "react";
 import {Matrix4} from "assets/js/cuon-matrix";
 import {getWebGLContext, iWebGLRenderingContext} from "assets/js/cuon-utils";
 
+
+const a_Face = 'a_Face';
+const a_Color = 'a_Color';
+
+
 // @link https://sites.google.com/site/webglbook/home/chapter-3
 export default class OrbDefence extends Component<any, any> {
     constructor(props) {
@@ -16,20 +21,31 @@ export default class OrbDefence extends Component<any, any> {
     // language=GLSL
     VSHADER_SOURCE = `
         attribute vec4 a_Position;
-        attribute vec4 a_Color;
-        attribute float a_Face;// Surface number (Cannot use int for attribute variable)
+        attribute vec4 ${a_Color};
+        attribute float ${a_Face}; // Surface number (Cannot use int for attribute variable)
         uniform mat4 u_MvpMatrix;
-        uniform int u_PickedFace;// Surface number of selected face
+        uniform int u_PickedFace; // Surface number of selected face
         varying vec4 v_Color;
+        
         void main() {
+        
             gl_Position = u_MvpMatrix * a_Position;
-            int face = int(a_Face);// Convert to int
-            vec3 color = (face == u_PickedFace) ? vec3(1.0) : a_Color.rgb;
+        
+            int face = int(a_Face); // Convert to int
+        
+            // @link https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)
+            vec3 color = (face == u_PickedFace) ? vec3(1.0, 0.3, 0.5) : a_Color.rgb; 
+        
             if (u_PickedFace == 0) { // In case of 0, insert the face number into alpha
+        
                 v_Color = vec4(color, a_Face/255.0);
+        
             } else {
+        
                 v_Color = vec4(color, a_Color.a);
+        
             }
+        
         }`;
 
     // Fragment shader program
@@ -39,11 +55,14 @@ export default class OrbDefence extends Component<any, any> {
         precision mediump float;
         #endif
         varying vec4 v_Color;
+        
         void main() {
+            
             gl_FragColor = v_Color;
+        
         }`;
 
-    ANGLE_STEP = 20.0; // Rotation angle (degrees/second)
+    ANGLE_STEP = 100.0; // Rotation angle (degrees/second)
 
     currentAngle = 0.0; // Current rotation angle
 
@@ -64,7 +83,7 @@ export default class OrbDefence extends Component<any, any> {
         }
 
         // Set the vertex information
-        const n = this.initVertexBuffers(gl);
+        const n : number = this.initVertexBuffers(gl);
 
         if (n < 0) {
             console.log('Failed to set the vertex information');
@@ -107,6 +126,7 @@ export default class OrbDefence extends Component<any, any> {
             const x: number = ev.clientX,
                 y: number = ev.clientY;
 
+            // @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
             const rect = target.getBoundingClientRect();
 
             if (rect.left <= x && x < rect.right && rect.top <= y && y < rect.bottom) {
@@ -161,12 +181,12 @@ export default class OrbDefence extends Component<any, any> {
         ]);
 
         const colors = new Float32Array([   // Colors
-            0.32, 0.18, 0.56, 0.32, 0.18, 0.56, 0.32, 0.18, 0.56, 0.32, 0.18, 0.56, // v0-v1-v2-v3 front
-            0.5, 0.41, 0.69, 0.5, 0.41, 0.69, 0.5, 0.41, 0.69, 0.5, 0.41, 0.69,  // v0-v3-v4-v5 right
-            0.78, 0.69, 0.84, 0.78, 0.69, 0.84, 0.78, 0.69, 0.84, 0.78, 0.69, 0.84, // v0-v5-v6-v1 up
-            0.0, 0.32, 0.61, 0.0, 0.32, 0.61, 0.0, 0.32, 0.61, 0.0, 0.32, 0.61,  // v1-v6-v7-v2 left
-            0.27, 0.58, 0.82, 0.27, 0.58, 0.82, 0.27, 0.58, 0.82, 0.27, 0.58, 0.82, // v7-v4-v3-v2 down
-            0.73, 0.82, 0.93, 0.73, 0.82, 0.93, 0.73, 0.82, 0.93, 0.73, 0.82, 0.93, // v4-v7-v6-v5 back
+            0.80, 1.0, 0.56, 0.32, 0.18, 0.56, 0.02, 0.18, 0.56, 0.32, 0.18, 0.56, // v0-v1-v2-v3 front
+            0.5, 0.41, 0.69, 0.10, 0.41, 0.69, 0.5, 0.41, 0.69, 0.5, 0.41, 0.69,  // v0-v3-v4-v5 right
+            0.78, 0.20, 0.84, 0.78, 0.69, 0.84, 0.78, 0.69, 0.84, 0.78, 0.69, 0.84, // v0-v5-v6-v1 up
+            0.0, 0.10, 0.61, 0.0, 0.32, 0.61, 0.70, 0.32, 0.61, 0.0, 0.32, 0.00,  // v1-v6-v7-v2 left
+            0.27, 0.80, 0.82, 0.27, 0.58, 0.82, 0.97, 0.58, 0.82, 0.27, 0.58, 0.82, // v7-v4-v3-v2 down
+            0.73, 0.12, 0.93, 0.43, 0.82, 0.93, 0.73, 0.82, 0.93, 0.73, 0.82, 0.93, // v4-v7-v6-v5 back
         ]);
 
         const faces = new Uint8Array([   // Faces
@@ -203,7 +223,7 @@ export default class OrbDefence extends Component<any, any> {
             return -1;// Color Information
         }
 
-        if (!this.initArrayBuffer(gl, faces, gl.UNSIGNED_BYTE, 1, 'a_Face')) {
+        if (!this.initArrayBuffer(gl, faces, gl.UNSIGNED_BYTE, 1, a_Face)) {
             return -1;// Surface Information
         }
 
@@ -219,7 +239,7 @@ export default class OrbDefence extends Component<any, any> {
 
     }
 
-    checkFace = (gl, n, x, y, currentAngle, u_PickedFace, viewProjMatrix: Matrix4, u_MvpMatrix) => {
+    checkFace = (gl : WebGLRenderingContext, n : number, x : number, y : number, currentAngle, u_PickedFace : WebGLUniformLocation, viewProjMatrix: Matrix4, u_MvpMatrix : WebGLUniformLocation) => {
 
         const pixels = new Uint8Array(4); // Array for storing the pixel value
 
@@ -230,24 +250,34 @@ export default class OrbDefence extends Component<any, any> {
         // Read the pixel value of the clicked position. pixels[3] is the surface number
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
+        console.log(pixels)
+
         return pixels[3];
 
     }
 
-    g_MvpMatrix = new Matrix4(undefined); // Model view projection matrix
+    g_MvpMatrix : Matrix4 = new Matrix4(undefined); // Model view projection matrix
 
-    draw = (gl, n, currentAngle, viewProjMatrix, u_MvpMatrix) => {
+    draw = (gl : WebGLRenderingContext, n : number, currentAngle : number, viewProjMatrix : Matrix4, u_MvpMatrix : WebGLUniformLocation) => {
+
         // Calculate The model view projection matrix and pass it to u_MvpMatrix
         this.g_MvpMatrix.set(viewProjMatrix);
+
         this.g_MvpMatrix.rotate(currentAngle, 1.0, 0.0, 0.0); // Rotate appropriately
+
         this.g_MvpMatrix.rotate(currentAngle, 0.0, 1.0, 0.0);
+
         this.g_MvpMatrix.rotate(currentAngle, 0.0, 0.0, 1.0);
+
         gl.uniformMatrix4fv(u_MvpMatrix, false, this.g_MvpMatrix.elements);
+
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     // Clear buffers
+
         gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);   // Draw
+
     }
 
-    draw2D = (ctx, currentAngle) => {
+    draw2D = (ctx : CanvasRenderingContext2D, currentAngle : number) => {
 
         ctx.clearRect(0, 0, 400, 400); // Clear <hud>
 
@@ -255,19 +285,21 @@ export default class OrbDefence extends Component<any, any> {
         ctx.beginPath();                      // Start drawing
 
         ctx.moveTo(120, 10);
+
         ctx.lineTo(200, 150);
+
         ctx.lineTo(40, 150);
 
         ctx.closePath();
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 1)'; // Set white to color of lines
+        ctx.strokeStyle = 'rgba(255, 0, 255, 1)'; // Set white to color of lines
 
         ctx.stroke();                           // Draw Triangle with white lines
 
         // Draw white letters
-        ctx.font = '18px "Times New Roman"';
+        ctx.font = '20px "Times New Roman"';
 
-        ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // Set white to the color of letters
+        ctx.fillStyle = 'rgba(255, 0, 255, 1)'; // Set white to the color of letters
 
         ctx.fillText('HUD: Head Up Display', 40, 180);
 
@@ -334,14 +366,13 @@ export default class OrbDefence extends Component<any, any> {
     render() {
 
         return (
-            <div>
-                <h4>Orb Defence</h4>
+            <>
                 {/** @link https://algassert.com/quirk# */}
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}
                         style={{position: "absolute", zIndex: 0}}/>
                 <canvas id="hud" width={window.innerWidth} height={window.innerHeight}
                         style={{position: "absolute", zIndex: 1}}/>
-            </div>
+            </>
         );
     }
 

@@ -1,3 +1,7 @@
+# Special Thanks
+* [Robert Renka](https://computerscience.engineering.unt.edu/people/faculty/robert-renka)
+* 
+
 # Overview
 * Compiling an open source react sample to illustrate and teach FUNDAMENTAL graphics and game programming. 
 * Samples should be self-contained 
@@ -38,7 +42,11 @@ Run the samples! This will automatically open your browser to [http://127.0.0.1:
     npm run start
 
 
-# Orb Defence 
+# Deployment
+
+https://github.com/gitname/react-gh-pages
+
+# Orb Defence (future project in this starter template repo)
 
 General concept is to store the whole games as a grid of boxes; an array 
 

@@ -30,6 +30,7 @@ import Hud from "./examples/Hud";
 import PickFace from "./examples/PickFace";
 import RotateObjectWithMouse from "./examples/RotateObjectWithMouse";
 import JameshFisher from "./examples/GameOfLife/JameshFisher";
+import Chaos from "./examples/Chaos";
 
 export interface iCustomRoute {
     component?: any,
@@ -544,6 +545,10 @@ class bootstrap extends Component<any, {
                 path: "/RotatingTriangle",
                 name: "RotatingTriangle",
                 component: RotatingTriangle
+            },{
+                path: "/Chaos",
+                name: "Chaos",
+                component: Chaos
             },{
                 path: "/PickFace",
                 name: "PickFace",
