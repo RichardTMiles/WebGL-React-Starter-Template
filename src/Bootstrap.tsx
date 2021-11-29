@@ -43,6 +43,7 @@ export interface iCustomRoute {
 class bootstrap extends Component<any, {
     axios: AxiosInstance,
     authenticate: string,
+    isAppLocal?: boolean,
     authenticated?: boolean,
     alert?: boolean,
     operationActive: boolean,
@@ -61,9 +62,9 @@ class bootstrap extends Component<any, {
         });
 
         this.state = {
+            isAppLocal: '3000' === window.location.port,
             axios: axios.create({
                 baseURL: '',
-
                 adapter: cache.adapter,
                 /**
                  * These headers are important to use here at dig.
@@ -586,6 +587,20 @@ class bootstrap extends Component<any, {
                 redirect: true
             },
         ];
+
+        if (false === this.state.isAppLocal) {
+
+            const publicURI = 'WebGL-React-Starter-Template';
+
+            Routes = Routes.map(value => {
+                return {
+                    ...value,
+                    path: publicURI + value.path,
+                    pathTo: publicURI + value.pathTo,
+                }
+            })
+
+        }
 
         return <>
             {this.subRoutingSwitch(Routes, {Routes})}
