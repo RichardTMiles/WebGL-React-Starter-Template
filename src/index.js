@@ -21,9 +21,7 @@ console.log(APP_ROOT);
 // @link https://sites.google.com/site/webglbook/home
 // @link https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
 ReactDOM.render(
-    <UriStyling
-        basename={isAppLocal?'':'/WebGL-React-Starter-Template'}
-        history={hist}>
+    <UriStyling history={hist}>
         <Bootstrap/>
     </UriStyling>,
     document.getElementById("root")
