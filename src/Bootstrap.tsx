@@ -271,7 +271,7 @@ class bootstrap extends Component<any, {
 
     authenticate = () => {
 
-        this.state.axios.get(this.state.authenticate).then(res => {
+        /*this.state.axios.get(this.state.authenticate).then(res => {
             console.log("authenticate data: ", res);
             this.setState({
                 id: res?.data?.id || '',
@@ -324,7 +324,7 @@ class bootstrap extends Component<any, {
                 }).reverse(),
                 isLoaded: true
             });
-        });
+        });*/
     };
 
     testRestfulPostPutDeleteResponse = (response, success, error) => {
@@ -585,18 +585,22 @@ class bootstrap extends Component<any, {
                 path: "/",
                 pathTo: "/ExampleList",
                 redirect: true
-            },
+            }
         ];
 
         if (false === this.state.isAppLocal) {
 
-            const publicURI = 'WebGL-React-Starter-Template';
+            const publicURI = '/WebGL-React-Starter-Template';
 
             Routes = Routes.map(value => {
-                return {
+
+                return value?.pathTo ? {
                     ...value,
                     path: publicURI + value.path,
-                    pathTo: publicURI + value.pathTo,
+                    pathTo: publicURI + value?.pathTo,
+                } : {
+                    ...value,
+                    path: publicURI + value.path
                 }
             })
 
