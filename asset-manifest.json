@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/WebGL-React-Starter-Template/static/js/main.f9d0bb1f.chunk.js",
-    "main.js.map": "/WebGL-React-Starter-Template/static/js/main.f9d0bb1f.chunk.js.map",
+    "main.js": "/WebGL-React-Starter-Template/static/js/main.398abde3.chunk.js",
+    "main.js.map": "/WebGL-React-Starter-Template/static/js/main.398abde3.chunk.js.map",
     "react-syntax-highlighter_languages_refractor_abap.js": "/WebGL-React-Starter-Template/static/js/react-syntax-highlighter_languages_refractor_abap.8038da25.chunk.js",
     "react-syntax-highlighter_languages_refractor_abap.js.map": "/WebGL-React-Starter-Template/static/js/react-syntax-highlighter_languages_refractor_abap.8038da25.chunk.js.map",
     "react-syntax-highlighter_languages_refractor_actionscript.js": "/WebGL-React-Starter-Template/static/js/react-syntax-highlighter_languages_refractor_actionscript.9d5b3352.chunk.js",
@@ -306,18 +306,18 @@
     "react-syntax-highlighter_languages_refractor_yaml.js.map": "/WebGL-React-Starter-Template/static/js/react-syntax-highlighter_languages_refractor_yaml.7d7e4c9c.chunk.js.map",
     "runtime-main.js": "/WebGL-React-Starter-Template/static/js/runtime-main.19b1e43a.js",
     "runtime-main.js.map": "/WebGL-React-Starter-Template/static/js/runtime-main.19b1e43a.js.map",
-    "static/js/153.39b31dbf.chunk.js": "/WebGL-React-Starter-Template/static/js/153.39b31dbf.chunk.js",
-    "static/js/153.39b31dbf.chunk.js.map": "/WebGL-React-Starter-Template/static/js/153.39b31dbf.chunk.js.map",
+    "static/js/153.a28252e9.chunk.js": "/WebGL-React-Starter-Template/static/js/153.a28252e9.chunk.js",
+    "static/js/153.a28252e9.chunk.js.map": "/WebGL-React-Starter-Template/static/js/153.a28252e9.chunk.js.map",
     "static/js/154.3acdd2ba.chunk.js": "/WebGL-React-Starter-Template/static/js/154.3acdd2ba.chunk.js",
     "static/js/154.3acdd2ba.chunk.js.map": "/WebGL-React-Starter-Template/static/js/154.3acdd2ba.chunk.js.map",
     "index.html": "/WebGL-React-Starter-Template/index.html",
-    "static/js/153.39b31dbf.chunk.js.LICENSE.txt": "/WebGL-React-Starter-Template/static/js/153.39b31dbf.chunk.js.LICENSE.txt",
+    "static/js/153.a28252e9.chunk.js.LICENSE.txt": "/WebGL-React-Starter-Template/static/js/153.a28252e9.chunk.js.LICENSE.txt",
     "static/media/EminenceFront_TheWho.mp3": "/WebGL-React-Starter-Template/static/media/EminenceFront_TheWho.d981224c.mp3",
     "static/media/webgl.png": "/WebGL-React-Starter-Template/static/media/webgl.926f00db.png"
   },
   "entrypoints": [
     "static/js/runtime-main.19b1e43a.js",
-    "static/js/153.39b31dbf.chunk.js",
-    "static/js/main.f9d0bb1f.chunk.js"
+    "static/js/153.a28252e9.chunk.js",
+    "static/js/main.398abde3.chunk.js"
   ]
 }
