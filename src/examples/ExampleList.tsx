@@ -15,11 +15,12 @@ export default class ExampleList extends Component<{
     render() {
 
         return (
-            <>
+            <div style={{textAlign: "center"}}>
+                <h1><a href={"https://github.com/RichardTMiles/WebGL-React-Starter-Template"}>https://github.com/RichardTMiles/WebGL-React-Starter-Template</a></h1>
                 {this.props.Routes.map(value => value?.redirect === true ? '' :
                     <><Link to={value.path}>{value?.name}</Link><br/></>
                 )}
-            </>
+            </div>
         );
     }
 
