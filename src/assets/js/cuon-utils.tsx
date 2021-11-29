@@ -1,4 +1,5 @@
-// cuon-utils.jsx (c) 2012 kanda and matsuda
+// cuon-utils.tsx (mit) 2021 richardtmiles
+// @ref cuon-utils.js - 2012 kanda and matsuda
 
 import {WebglUtils} from "./webgl-utils"
 
@@ -7,7 +8,8 @@ import {WebglUtils} from "./webgl-utils"
 /**
  * Create the linked program object
  * @param gl GL context
- * @param vshader a vertex shader program (string)
+ * @param vshader a vertex shad
+ * er program (string)
  * @param fshader a fragment shader program (string)
  * @return created program object, or null if the creation has failed
  */
@@ -113,10 +115,27 @@ export function loadShader(gl : WebGLRenderingContext, type : number, source) {
 
 }
 
+export interface iAddAdditionalAttributes<AdditionalAttributesType> {
+    attributes?: AdditionalAttributesType
+}
 
-export interface iWebGLRenderingContext extends WebGLRenderingContext {
-    canvas: HTMLCanvasElement,  // this override is helpful for ts
+
+export interface iWebGLProgram<AdditionalAttributesType = {}>
+    extends iAddAdditionalAttributes<AdditionalAttributesType>{
+
+}
+
+export interface iWebGLRenderingContextProgram<AdditionalAttributesType = {}>
+    extends iAddAdditionalAttributes<AdditionalAttributesType> {
+    name: string,
     program: WebGLProgram
+}
+
+export interface iWebGLRenderingContext<AdditionalAttributesType = {}>
+    extends WebGLRenderingContext, iAddAdditionalAttributes<AdditionalAttributesType>{
+    canvas: HTMLCanvasElement,  // this override is helpful for ts
+    program: WebGLProgram,
+    programs?: Array<iWebGLRenderingContextProgram>
 }
 
 /**
@@ -126,7 +145,7 @@ export interface iWebGLRenderingContext extends WebGLRenderingContext {
  * @param fshader <string> a fragment shader program (string)
  * @return the rendering context for WebGL
  */
-export function getWebGLContext(canvasId : string, vshader : string, fshader : string) : iWebGLRenderingContext {
+export function getWebGLContext<AdditionalAttributesType = {}>(canvasId : string, vshader ?: string, fshader ?: string) : iWebGLRenderingContext<AdditionalAttributesType> {
 
     const canvas : HTMLCanvasElement | null = document.getElementById(canvasId) as HTMLCanvasElement;
 
@@ -141,7 +160,20 @@ export function getWebGLContext(canvasId : string, vshader : string, fshader : s
 
     if (!gl) {
 
-        throw 'Parameter is not a number!';
+        throw 'WebglUtils failed to setupWebGL()!';
+
+    }
+
+    if (vshader === undefined && fshader === undefined) {
+
+        return gl as iWebGLRenderingContext<AdditionalAttributesType>;
+
+    }
+
+    if (vshader === undefined
+        || fshader === undefined) {
+
+        throw 'getWebGLContext was called incorrectly; vshader or fshader was undefined but not both. To skip program binding in getWebGLContext exclude both optional parameters';
 
     }
 
@@ -157,7 +189,7 @@ export function getWebGLContext(canvasId : string, vshader : string, fshader : s
 
     gl.program = program;
 
-    return gl;
+    return gl as iWebGLRenderingContext<AdditionalAttributesType>;
 
 }
 
