@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
 import {getWebGLContext} from "assets/js/cuon-utils"
+import Canvas from "../Canvas";
 
 export default class MultiPoint extends Component<any, any> {
     constructor(props) {
@@ -8,6 +9,9 @@ export default class MultiPoint extends Component<any, any> {
         // we use this to make the card to appear after the page has been rendered
         this.state = {};
     }
+
+
+    canvasId = "WebGl";
 
 
     // ColoredPoint.js (c) 2012 matsuda
@@ -30,12 +34,8 @@ export default class MultiPoint extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext(this.canvasId, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
 
-        if (!gl) {
-            console.log('Failed to get the rendering context for WebGL');
-            return;
-        }
 
         // Write the positions of vertices to a vertex shader
         const n = this.initVertexBuffers(gl);
@@ -98,13 +98,10 @@ export default class MultiPoint extends Component<any, any> {
         return n;
     }
 
-    render() {
 
-        return (
-            <>
-                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
-            </>
-        );
+
+    render() {
+        return <Canvas id={this.canvasId}/>;
     }
 
 }

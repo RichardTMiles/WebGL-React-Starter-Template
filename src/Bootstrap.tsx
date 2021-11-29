@@ -9,28 +9,7 @@ import { setupCache } from 'axios-cache-adapter'
 import PageNotFound from 'PageNotFound';
 // This is our ajax class
 import {CodeBlock, dracula, googlecode} from 'react-code-blocks';
-import OrbDefence from "./examples/OrbDefence";
-import ClickedPoints from "./examples/ClickedPoints";
-import ExampleList from "./examples/ExampleList";
-import ColoredPoints from "./examples/ColoredPoints";
-import MultiPoint from "./examples/MultiPoint";
-import HelloTriangle from "./examples/HelloTriangle";
-import HelloTriangleLines from "./examples/HelloTriangleLines";
-import HelloTriangleStrip from "./examples/HelloTriangleStrip";
-import HelloTriangleLoop from "./examples/HelloTriangleLoop";
-import HelloQuad from "./examples/HelloQuad";
-import HelloQuadFan from "./examples/HelloQuadFan";
-import RotatedTriangle from "./examples/RotatedTriangle";
-import RotatedTriangleMatrix from "./examples/RotatedTriangleMatrix";
-import ScaledTriangleMatrix from "./examples/ScaledTriangleMatrix";
-import RotatedTranslatedTriangle from "./examples/RotatedTranslatedTriangle";
-import RotatingTriangle from "./examples/RotatingTriangle";
-import AudioThreeJS from "./examples/AudioThreeJS";
-import Hud from "./examples/Hud";
-import PickFace from "./examples/PickFace";
-import RotateObjectWithMouse from "./examples/RotateObjectWithMouse";
-import JameshFisher from "./examples/GameOfLife/JameshFisher";
-import Chaos from "./examples/Chaos";
+import WebGl from "./WebGl";
 
 export interface iCustomRoute {
     component?: any,
@@ -270,6 +249,9 @@ class bootstrap extends Component<any, {
     };
 
     authenticate = () => {
+        this.setState({
+            isLoaded: true
+        });
 
         /*this.state.axios.get(this.state.authenticate).then(res => {
             console.log("authenticate data: ", res);
@@ -481,6 +463,7 @@ class bootstrap extends Component<any, {
         this.authenticate();
     }
 
+
     render() {
         console.log("LOGIN JSX RENDER");
 
@@ -489,113 +472,30 @@ class bootstrap extends Component<any, {
         // Routes that belong to the public and private sector
         let Routes : iCustomRoute[] = [
             {
-                path: "/Multi",
-                name: "Multi-Point",
-                component: MultiPoint
-            },
-            {
-                path: "/ClickedPoints",
-                name: "Clicked Points",
-                component: ClickedPoints
-            },
-            {
-                path: "/Colored",
-                name: "Colored Points",
-                component: ColoredPoints
-            },{
-                path: "/HelloTriangle",
-                name: "HelloTriangle",
-                component: HelloTriangle
-            },{
-                path: "/HelloTriangleLines",
-                name: "HelloTriangleLines",
-                component: HelloTriangleLines
-            },{
-                path: "/HelloTriangleStrip",
-                name: "HelloTriangleStrip",
-                component: HelloTriangleStrip
-            },{
-                path: "/HelloTriangleLoop",
-                name: "HelloTriangleLoop",
-                component: HelloTriangleLoop
-            },{
-                path: "/HelloQuad",
-                name: "HelloQuad",
-                component: HelloQuad
-            },{
-                path: "/HelloQuadFan",
-                name: "HelloQuadFan",
-                component: HelloQuadFan
-            },{
-                path: "/RotatedTriangle",
-                name: "RotatedTriangle",
-                component: RotatedTriangle
-            },{
-                path: "/RotatedTriangleMatrix",
-                name: "RotatedTriangleMatrix",
-                component: RotatedTriangleMatrix
-            },{
-                path: "/ScaledTriangleMatrix",
-                name: "ScaledTriangleMatrix",
-                component: ScaledTriangleMatrix
-            },{
-                path: "/RotatedTranslatedTriangle",
-                name: "RotatedTranslatedTriangle",
-                component: RotatedTranslatedTriangle
-            },{
-                path: "/RotatingTriangle",
-                name: "RotatingTriangle",
-                component: RotatingTriangle
-            },{
-                path: "/Chaos",
-                name: "Chaos",
-                component: Chaos
-            },{
-                path: "/PickFace",
-                name: "PickFace",
-                component: PickFace
-            },{
-                path: "/RotateObjectWithMouse",
-                name: "RotateObjectWithMouse",
-                component: RotateObjectWithMouse
-            },{
-                path: "/HUD",
-                name: "HUD",
-                component: Hud
-            },{
-                path: "/GOL-JameshFisher",
-                name: "GOL-JameshFisher",
-                component: JameshFisher
-            },{
-                path: "/AudioThreeJS",
-                name: "AudioThreeJS",
-                component: AudioThreeJS
-            },
-            {
-                path: "/orb",
-                name: "Orb Defence",
-                component: OrbDefence
-            },
-            {
-                path: "/ExampleList",
+                path: "/WebGl",
                 name: "Example List",
-                component: ExampleList
+                component: WebGl
             },
             {
                 path: "/",
-                pathTo: "/ExampleList",
+                pathTo: "/WebGl",
                 redirect: true
             }
         ];
 
 
-        console.log(Routes)
-
         return <>
-            {this.subRoutingSwitch(Routes, {Routes})}
+
+            {this.subRoutingSwitch(Routes, {
+                Routes: Routes
+            })}
+
             {alert}
+
         </>;
+
     }
+
 }
 
 export default bootstrap;
