@@ -123,7 +123,7 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
         return (
             <div>
                 <h4>Orb Defence</h4>
-                {/** @link https://algassert.com/quirk# */}
+                
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
             </div>
         );

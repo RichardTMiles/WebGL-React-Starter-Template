@@ -41,9 +41,13 @@ Run the samples! This will automatically open your browser to [http://127.0.0.1:
 
     npm run start
 
+# Resources 
+* [https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)](https://www.khronos.org/opengl/wiki/Data_Type_(GLSL))
+* [https://www.opengl.org//archives/resources/code/samples/redbook/](https://www.opengl.org//archives/resources/code/samples/redbook/)
 
 # Deployment
 
+https://create-react-app.dev/docs/deployment/#github-pages-https-pagesgithubcom
 https://github.com/gitname/react-gh-pages
 
 # Orb Defence (future project in this starter template repo)
@@ -54,6 +58,14 @@ Based on the video the lanes total  [36][x] where x is easily over 100, but
 I have not counted. The top and bottom of the actual game reserved for 
 making the border; so the ~ playable game is really only 34 in length. 
 
+
+## WebGL Tower Defence
+
+[sample one](http://www.webtowerdefense.com/)
+
+### Other Cool Demos not ported
+
+[quantom computing](https://algassert.com/quirk#)
 
 ## Terminology 
 

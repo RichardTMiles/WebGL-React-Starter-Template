@@ -130,11 +130,9 @@ export default class RotatedTriangle extends Component<any, any> {
     render() {
 
         return (
-            <div>
-                <h4>Orb Defence</h4>
-                {/** @link https://algassert.com/quirk# */}
+            <>
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
-            </div>
+            </>
         );
     }
 

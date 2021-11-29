@@ -125,10 +125,10 @@ export default class ColoredPoints extends Component<any, {
 
         // @link https://sites.google.com/site/webglbook/home/chapter-3
         return (
-            <div>
+            <>
                 <h1>{this.state.x}, {this.state.y}</h1>
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
-            </div>
+            </>
         );
     }
 

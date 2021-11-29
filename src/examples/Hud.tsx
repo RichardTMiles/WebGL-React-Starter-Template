@@ -329,7 +329,6 @@ export default class Hud extends Component<any, any> {
     render() {
         return (
             <>
-                {/** @link https://algassert.com/quirk# */}
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}
                         style={{position: "absolute", zIndex: 0}}>
                     Please use a browser that supports "canvas"

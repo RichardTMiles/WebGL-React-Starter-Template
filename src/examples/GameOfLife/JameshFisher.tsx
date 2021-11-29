@@ -234,7 +234,7 @@ export default class JameshFisher extends Component<any, any> {
         return (
             <div>
                 <h4>Orb Defence</h4>
-                {/** @link https://algassert.com/quirk# */}
+                
                 <canvas id="canvas" height="64" width="64" style={{width: "256px", height: "256px", imageRendering: "pixelated"}}/>
             </div>
         );

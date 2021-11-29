@@ -12,15 +12,15 @@ export default class Blank extends Component<any, any> {
     // ColoredPoint.js (c) 2012 matsuda
     // Vertex shader program
     // language=GLSL
-    VSHADER_SOURCE =
-        'void main() {\n' +
-        '}\n';
+    VSHADER_SOURCE = `
+        void main() {
+        }`;
 
     // Fragment shader program
     // language=GLSL
-    FSHADER_SOURCE =
-        'void main() {\n' +
-        '}\n';
+    FSHADER_SOURCE = `
+        void main() {
+        }`;
 
     componentDidMount() {
 
@@ -30,8 +30,6 @@ export default class Blank extends Component<any, any> {
 
         return (
             <div>
-                <h4>Orb Defence</h4>
-                {/** @link https://algassert.com/quirk# */}
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
             </div>
         );

@@ -367,7 +367,7 @@ export default class OrbDefence extends Component<any, any> {
 
         return (
             <>
-                {/** @link https://algassert.com/quirk# */}
+                
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}
                         style={{position: "absolute", zIndex: 0}}/>
                 <canvas id="hud" width={window.innerWidth} height={window.innerHeight}

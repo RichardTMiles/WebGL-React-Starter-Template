@@ -15,11 +15,11 @@ export default class ExampleList extends Component<{
     render() {
 
         return (
-            <div>
+            <>
                 {this.props.Routes.map(value => value?.redirect === true ? '' :
                     <><Link to={value.path}>{value?.name}</Link><br/></>
                 )}
-            </div>
+            </>
         );
     }
 

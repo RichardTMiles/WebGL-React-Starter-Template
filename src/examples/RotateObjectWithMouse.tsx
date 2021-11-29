@@ -307,7 +307,6 @@ export default class RotateObjectWithMouse extends Component<any, any> {
 
         return (
             <>
-                {/** @link https://algassert.com/quirk# */}
                 <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
             </>
         );
