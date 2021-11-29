@@ -4,6 +4,7 @@
   "description": "Drop-In Gaming FED",
   "private": true,
   "main": "src/index.js",
+  "homepage": ".",
   "dependencies": {
     "@sweetalert/with-react": "^0.1.1",
     "@types/history": "^4.7.2",
@@ -55,8 +56,8 @@
   "scripts": {
     "start": "react-scripts start",
     "start:legacy": "react-scripts --openssl-legacy-provider start",
-    "build:legacy": "PUBLIC_URL=/WebGL-React-Starter-Template/ react-scripts --openssl-legacy-provider build",
-    "build": "PUBLIC_URL=/WebGL-React-Starter-Template/ react-scripts build",
+    "build:legacy": "react-scripts --openssl-legacy-provider build",
+    "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
