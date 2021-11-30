@@ -115,7 +115,10 @@ export default class Bezier extends Component<any, any> {
         const canvasId = "webgl"
 
         //  Get the rendering context for WebGL
-        this.gl = getWebGLContext(canvasId, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        this.gl = getWebGLContext(canvasId, [{
+                vertexShader: this.VSHADER_SOURCE,
+                fragmentShader: this.FSHADER_SOURCE
+            }]);
 
         //  Specify the color for clearing <canvas> (background color)
         this.gl.clearColor(0, 0, 0, 1);
@@ -333,7 +336,13 @@ export default class Bezier extends Component<any, any> {
 
         this.gl.bufferData(this.gl.ARRAY_BUFFER, vertices, this.gl.STATIC_DRAW);
 
-        const a_Position = this.gl.getAttribLocation(this.gl.program, 'a_Position');
+        if (undefined === this?.gl?.program?.value) {
+
+            throw 'Failed; saw condition undefined === this?.gl?.program?.value (search me in code)';
+
+        }
+
+        const a_Position = this.gl.getAttribLocation(this.gl.program.value, 'a_Position');
 
         if (a_Position < 0) {
 

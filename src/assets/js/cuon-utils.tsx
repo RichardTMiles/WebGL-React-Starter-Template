@@ -4,16 +4,18 @@
 import {WebglUtils} from "./webgl-utils"
 
 
-
 /**
  * Create the linked program object
  * @param gl GL context
  * @param vshader a vertex shad
  * er program (string)
  * @param fshader a fragment shader program (string)
+ * @param name a generic attribute keyable with the .find() method
  * @return created program object, or null if the creation has failed
  */
-export function createProgram(gl : WebGLRenderingContext, vshader : string, fshader : string) : WebGLProgram  {
+export function createProgram<AdditionalAttributesType = {}, iWebGLProgramType = iWebGLProgram>
+(gl: iWebGLRenderingContext<any, iWebGLProgramType>, vshader: string, fshader: string, name: string = "default")
+    : iWebGLRenderingContextProgram<AdditionalAttributesType, iWebGLProgramType> {
 
     // Create shader object
     const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vshader);
@@ -29,7 +31,7 @@ export function createProgram(gl : WebGLRenderingContext, vshader : string, fsha
     }
 
     // Create a program object
-    const program: WebGLProgram | null = gl.createProgram();
+    const program: iWebGLProgramType | null = gl.createProgram() as iWebGLProgramType;
 
     if (!program) {
 
@@ -64,7 +66,24 @@ export function createProgram(gl : WebGLRenderingContext, vshader : string, fsha
 
     }
 
-    return program;
+    const iProgram = {
+        name: name,
+        value: program
+    };
+
+    gl.useProgram(program);
+
+    gl.program = iProgram;
+
+    if (undefined === gl.programs) {
+
+        gl.programs = [];
+
+    }
+
+    gl.programs.push(iProgram);
+
+    return iProgram;
 
 }
 
@@ -75,7 +94,7 @@ export function createProgram(gl : WebGLRenderingContext, vshader : string, fsha
  * @param source shader program (string)
  * @return created shader object, or null if the creation has failed.
  */
-export function loadShader(gl : WebGLRenderingContext, type : number, source) {
+export function loadShader(gl: WebGLRenderingContext, type: number, source) {
 
     // Create shader object
     const shader = gl.createShader(type);
@@ -115,39 +134,44 @@ export function loadShader(gl : WebGLRenderingContext, type : number, source) {
 
 }
 
-export interface iAddAdditionalAttributes<AdditionalAttributesType> {
+
+export interface iWebGLProgram<iWebGLProgramAdditionalAttributesType = any>
+    extends WebGLProgram {
+    attributes?: iWebGLProgramAdditionalAttributesType
+}
+
+export interface iWebGLRenderingContextProgram<AdditionalAttributesType = any, iWebGLProgramAdditionalAttributesType = any> {
+    name: string,
+    value: iWebGLProgram<iWebGLProgramAdditionalAttributesType>,
     attributes?: AdditionalAttributesType
 }
 
-
-export interface iWebGLProgram<AdditionalAttributesType = {}>
-    extends iAddAdditionalAttributes<AdditionalAttributesType>{
-
-}
-
-export interface iWebGLRenderingContextProgram<AdditionalAttributesType = {}>
-    extends iAddAdditionalAttributes<AdditionalAttributesType> {
-    name: string,
-    program: WebGLProgram
-}
-
-export interface iWebGLRenderingContext<AdditionalAttributesType = {}>
-    extends WebGLRenderingContext, iAddAdditionalAttributes<AdditionalAttributesType>{
+export interface iWebGLRenderingContext<AdditionalAttributesType = any, WebGLProgramType = iWebGLRenderingContextProgram>
+    extends WebGLRenderingContext {
     canvas: HTMLCanvasElement,  // this override is helpful for ts
-    program: WebGLProgram,
-    programs?: Array<iWebGLRenderingContextProgram>
+    program?: iWebGLRenderingContextProgram<WebGLProgramType>,
+    programs?: Array<iWebGLRenderingContextProgram<WebGLProgramType> | undefined>,
+    attributes: AdditionalAttributesType
+}
+
+
+export interface iProgramArgs {
+    vertexShader?: string,
+    fragmentShader?: string,
+    name?: string
 }
 
 /**
  * Initialize and get the rendering for WebGL
  * @param canvasId <string> element
- * @param vshader <string> a vertex shader program (string)
- * @param fshader <string> a fragment shader program (string)
+ * @param programs
  * @return the rendering context for WebGL
  */
-export function getWebGLContext<AdditionalAttributesType = {}>(canvasId : string, vshader ?: string, fshader ?: string) : iWebGLRenderingContext<AdditionalAttributesType> {
+export function getWebGLContext<iWebGLRenderingContextAdditionalAttributesType = any, WebGLProgramType = iWebGLRenderingContextProgram>
+(canvasId: string, programs ?: Array<iProgramArgs>)
+    : iWebGLRenderingContext<iWebGLRenderingContextAdditionalAttributesType, WebGLProgramType> {
 
-    const canvas : HTMLCanvasElement | null = document.getElementById(canvasId) as HTMLCanvasElement;
+    const canvas: HTMLCanvasElement | null = document.getElementById(canvasId) as HTMLCanvasElement;
 
     if (null === canvas) {
 
@@ -156,7 +180,11 @@ export function getWebGLContext<AdditionalAttributesType = {}>(canvasId : string
     }
 
     // Get the rendering context for WebGL
-    const gl : iWebGLRenderingContext = WebglUtils.setupWebGL(canvas, undefined, undefined) as iWebGLRenderingContext;
+    const gl: iWebGLRenderingContext<iWebGLRenderingContextAdditionalAttributesType, WebGLProgramType>
+        = WebglUtils.setupWebGL(canvas, undefined, undefined) as iWebGLRenderingContext<iWebGLRenderingContextAdditionalAttributesType, WebGLProgramType>;
+
+    // @link https://stackoverflow.com/questions/13142635/how-can-i-create-an-object-based-on-an-interface-file-definition-in-typescript
+    gl.attributes = {} as iWebGLRenderingContextAdditionalAttributesType;
 
     if (!gl) {
 
@@ -164,32 +192,21 @@ export function getWebGLContext<AdditionalAttributesType = {}>(canvasId : string
 
     }
 
-    if (vshader === undefined && fshader === undefined) {
+    programs?.map((value: iProgramArgs) => {
 
-        return gl as iWebGLRenderingContext<AdditionalAttributesType>;
+        if (value.vertexShader === undefined
+            || value.fragmentShader === undefined) {
 
-    }
+            throw 'getWebGLContext was called incorrectly; vshader or fshader was undefined but not both. To skip program binding in getWebGLContext exclude both optional parameters';
 
-    if (vshader === undefined
-        || fshader === undefined) {
+        }
 
-        throw 'getWebGLContext was called incorrectly; vshader or fshader was undefined but not both. To skip program binding in getWebGLContext exclude both optional parameters';
+        createProgram<any, WebGLProgramType>(gl, value.vertexShader, value.fragmentShader, value.name);
 
-    }
 
-    const program = createProgram(gl, vshader, fshader);
+    });
 
-    if (!program) {
-
-        throw 'Failed to create program';
-
-    }
-
-    gl.useProgram(program);
-
-    gl.program = program;
-
-    return gl as iWebGLRenderingContext<AdditionalAttributesType>;
+    return gl as iWebGLRenderingContext<iWebGLRenderingContextAdditionalAttributesType, WebGLProgramType>;
 
 }
 

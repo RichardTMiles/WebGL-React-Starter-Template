@@ -30,7 +30,10 @@ export default class HelloQuad extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        var gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        var gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         // Write the positions of vertices to a vertex shader
         var n = this.initVertexBuffers(gl);

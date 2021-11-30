@@ -38,7 +38,7 @@ export interface iCustomRoute {
     redirect?: boolean
 }
 
-class WebGl extends Component<{ axios: AxiosInstance,
+export default class WebGl extends Component<{ axios: AxiosInstance,
     authenticate: string,
     isAppLocal?: boolean,
     authenticated?: boolean,
@@ -180,5 +180,3 @@ class WebGl extends Component<{ axios: AxiosInstance,
         </>;
     }
 }
-
-export default WebGl;

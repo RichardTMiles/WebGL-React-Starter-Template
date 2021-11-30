@@ -69,7 +69,10 @@ export default class OrbDefence extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl: iWebGLRenderingContext = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl: iWebGLRenderingContext = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         // Retrieve <canvas> element
         const hud: HTMLCanvasElement | null = document.getElementById('hud') as HTMLCanvasElement;
@@ -95,10 +98,16 @@ export default class OrbDefence extends Component<any, any> {
 
         gl.enable(gl.DEPTH_TEST);
 
-        // Get the storage locations of uniform variables
-        const u_MvpMatrix: WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
+        const program = gl?.program?.value;
 
-        const u_PickedFace: WebGLUniformLocation | null = gl.getUniformLocation(gl.program, 'u_PickedFace');
+        if (program === undefined) {
+            throw 'Failed to capture program orb'
+        }
+
+        // Get the storage locations of uniform variables
+        const u_MvpMatrix: WebGLUniformLocation | null = gl.getUniformLocation(program, 'u_MvpMatrix');
+
+        const u_PickedFace: WebGLUniformLocation | null = gl.getUniformLocation(program, 'u_PickedFace');
 
         if (!u_MvpMatrix || !u_PickedFace) {
 
@@ -343,8 +352,14 @@ export default class OrbDefence extends Component<any, any> {
 
         gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
         // Assign the buffer object to the attribute variable
-        const a_attribute = gl.getAttribLocation(gl.program, attribute);
+        const a_attribute = gl.getAttribLocation(program, attribute);
 
         if (a_attribute < 0) {
             console.log('Failed to get the storage location of ' + attribute);

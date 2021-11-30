@@ -49,16 +49,24 @@ export default class Chaos extends Component<any, any> {
         //  lit.  The image so generated represents a Sierpinski triangle.
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         if (!gl) {
             console.log("Failed to get the rendering context for WebGL.");
             return;
         }
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program in chaos.tsx'
+        }
 
         // Get the index of a_Position
-        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const a_Position = gl.getAttribLocation(program, 'a_Position');
 
         if (a_Position < 0) {
             console.log("Failed to get the storage location of a_Position.");
@@ -66,7 +74,7 @@ export default class Chaos extends Component<any, any> {
         }
 
         // Get the storage location of u_FragColor
-        const u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
+        const u_FragColor = gl.getUniformLocation(program, 'u_FragColor');
 
         if (!u_FragColor) {
             console.log('Failed to get the storage location of u_FragColor');

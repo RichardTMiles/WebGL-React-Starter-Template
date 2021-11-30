@@ -2,11 +2,16 @@ import React, {Component} from "react";
 import {Matrix4, Vector3} from "assets/js/cuon-matrix";
 import {
     getWebGLContext,
-    createProgram,
     iWebGLRenderingContext,
-    iWebGLRenderingContextProgram, iWebGLProgram
+    iWebGLProgram, iProgramArgs
 } from "../assets/js/cuon-utils";
 import {Orientation} from "Orientation";
+
+import bunny from "assets/json/bunny.json"
+import cone from "assets/json/cone.json"
+import cube from "assets/json/cube.json"
+import e37 from "assets/json/e37.json"
+import elephant from "assets/json/elephant.json"
 
 // const logo = require('assets/img/webgl.png');
 
@@ -504,21 +509,30 @@ export default class RotateObjectWithMouse extends Component<any, any> {
         //  Get the rendering context for WebGL.
         this.gl = getWebGLContext<{
             bbox: any
-        }>("webgl");
+        }>("webgl", [
+            {
+                vertexShader: this.VSHADER_SOURCE_FLAT_SHADING,
+                fragmentShader: this.FSHADER_SOURCE_FLAT_SHADING,
+                name: 'prgF'
+            },{
+                vertexShader: this.VSHADER_SOURCE_GOURAUD_SHADING,
+                fragmentShader: this.FSHADER_SOURCE_GOURAUD_SHADING,
+                name: 'prgG'
+            },{
+                vertexShader: this.VSHADER_SOURCE_PHONG_SHADING,
+                fragmentShader: this.FSHADER_SOURCE_PHONG_SHADING,
+                name: 'prgP'
+            },{
+                vertexShader: this.VSHADER_SOURCE_WIRE_SHADING,
+                fragmentShader: this.FSHADER_SOURCE_WIRE_SHADING,
+                name: 'prgW'
+            },
+        ] as Array<iProgramArgs>);
+
 
         if (!this.gl) {
 
             console.log("Failed to get the rendering context for WebGL");
-
-            return;
-
-        }
-
-        //  Use lib/cuon-utils.js functions to initialize shaders and create
-        //  program objects.
-        if (!this.makePrograms(this.gl)) {
-
-            console.log("Failed to intialize shaders.");
 
             return;
 
@@ -535,13 +549,13 @@ export default class RotateObjectWithMouse extends Component<any, any> {
         //  Prompt for a file name.
         const fname = prompt("Specify a path to a json file:  " +
             "bunny, cone, cube, e37, or elephant",
-            'models/cube.json');
+            'cube');
 
         //  Load a model from the web server using AJAX + JSON.
         //  This function registers a callback and returns immediately.
         //  The callback (handleLoadedModel), if successful, will initiate drawing.
 
-        this.loadModel(this.gl, fname);
+        this.loadModel(fname);
 
         //  Register event handlers for keypresses and mouse events.
         document.onkeydown = (ev) => {
@@ -697,7 +711,7 @@ export default class RotateObjectWithMouse extends Component<any, any> {
 
     getProgramByName = (name: string): iProgramMultipleShaders => {
 
-        const v = this.gl?.programs?.find((v: iWebGLRenderingContextProgram) => v.name === name)?.program;
+        const v = this.gl?.programs?.find((v: any) => v.name === name)?.value;
 
         if (undefined === v) {
             throw 'Failed to find program ' + name;
@@ -971,25 +985,33 @@ export default class RotateObjectWithMouse extends Component<any, any> {
             prg.attributes.u_LightDirection = this.gl.getUniformLocation(prg, 'u_LightDirection');
             prg.attributes.u_Shininess = this.gl.getUniformLocation(prg, 'u_Shininess');
 
+            if (!prg.attributes.u_Shininess
+                || !prg.attributes.u_LightColor
+                || !prg.attributes.u_LightDirection
+                || !prg.attributes.u_AmbientLight) {
+                throw 'Failed to get the storage location of attribute or uniform variable (lighting variables)'
+            }
+
         } else {
 
             prg.attributes.a_BaryCoords = this.gl.getAttribLocation(prg, 'a_BaryCoords');
+
+            if (!prg.attributes.a_BaryCoords) {
+                throw 'Failed to get the storage location of a_BaryCoords'
+
+            }
 
         }
 
         if (undefined === prg?.attributes?.a_Position
             || prg?.attributes?.a_Position < 0
             || prg?.attributes?.a_Normal < 0
-            || !prg.attributes.u_AmbientLight
             || !prg.attributes.u_BackColor
             || !prg.attributes.u_FrontColor
-            || !prg.attributes.u_LightColor
-            || !prg.attributes.u_LightDirection
             || !prg.attributes.u_MvMatrix
             || !prg.attributes.u_MvpMatrix
             || !prg.attributes.u_NormalMatrix
-            || !prg.attributes.u_Perspective
-            || !prg.attributes.u_Shininess) {
+            || !prg.attributes.u_Perspective) {
 
             throw 'Failed to get the storage location of attribute or uniform variable'
 
@@ -1009,7 +1031,7 @@ export default class RotateObjectWithMouse extends Component<any, any> {
 
 
     /******************************************************************************/
-    handleLoadedModel = (gl, filename, payload) => {
+    handleLoadedModel = (payload) => {
 
 
         if (undefined == this.gl) {
@@ -1019,7 +1041,6 @@ export default class RotateObjectWithMouse extends Component<any, any> {
         //  Create the typed arrays and buffers associated with model geometry:
         //  vertices, vertex normals, and triangle indices.
 
-        alert(filename + ' has been retrieved from the server');
         this.modelLoaded = true;
 
         let vertices = new Float32Array(payload.vertices);
@@ -1027,9 +1048,9 @@ export default class RotateObjectWithMouse extends Component<any, any> {
         let vnormals = this.constructNormals(vertices, indices);
 
         //  Create bounding box object bbox.
-        gl.bbox = {};
+        this.gl.attributes.bbox = {};
 
-        this.computeBB(vertices, gl.bbox);
+        this.computeBB(vertices, this.gl.attributes.bbox);
 
         //  Reorder the vertex array and expand it by replicating vertices if
         //  necessary so that it contains three distinct vertices for each triangle,
@@ -1095,28 +1116,28 @@ export default class RotateObjectWithMouse extends Component<any, any> {
         }
 
         //  Create the buffer objects and copy the data
-        this.buffers.vertexBuffer = this.createArrayBuffer(this.gl, vertices, 3, gl.FLOAT);
+        this.buffers.vertexBuffer = this.createArrayBuffer(this.gl, vertices, 3, this.gl.FLOAT);
 
         if (!this.buffers.vertexBuffer) {
             console.log('Failed to create vertex buffer');
             return;
         }
 
-        this.buffers.vnormalBuffer = this.createArrayBuffer(this.gl, vnormals, 3, gl.FLOAT);
+        this.buffers.vnormalBuffer = this.createArrayBuffer(this.gl, vnormals, 3, this.gl.FLOAT);
 
         if (!this.buffers.vnormalBuffer) {
             console.log('Failed to create vertex normal buffer');
             return;
         }
 
-        this.buffers.tnormalBuffer = this.createArrayBuffer(this.gl, tnormals, 3, gl.FLOAT);
+        this.buffers.tnormalBuffer = this.createArrayBuffer(this.gl, tnormals, 3, this.gl.FLOAT);
 
         if (!this.buffers.tnormalBuffer) {
             console.log('Failed to create triangle normal buffer');
             return;
         }
 
-        this.buffers.bcoordsBuffer = this.createArrayBuffer(this.gl, bcoords, 3, gl.FLOAT);
+        this.buffers.bcoordsBuffer = this.createArrayBuffer(this.gl, bcoords, 3, this.gl.FLOAT);
 
         if (!this.buffers.bcoordsBuffer) {
             console.log('Failed to create barycentric coordinates buffer');
@@ -1325,8 +1346,8 @@ export default class RotateObjectWithMouse extends Component<any, any> {
                 sd = Math.sin(ad2);
                 q = this.orient_model.toQuaternion();
 
-//  Compute r = p*q, where p is the unit quaternion equivalent of
-//  angle -mstep or -5*mstep and axis [1, 0, 0].
+                //  Compute r = p*q, where p is the unit quaternion equivalent of
+                //  angle -mstep or -5*mstep and axis [1, 0, 0].
 
                 r[0] = cd * q[0] - sd * q[1];
                 r[1] = cd * q[1] + sd * q[0];
@@ -1470,66 +1491,30 @@ export default class RotateObjectWithMouse extends Component<any, any> {
 
 
     /******************************************************************************/
-    loadModel = (gl, filename) => {
+    loadModel = (filename) => {
 
         // Create an AJAX request to load a model asynchronously.
-        const request = new XMLHttpRequest();
+        // bunny, cone, cube, e37, or elephant
+        switch (filename) {
 
-        // var resource = "http://" + document.domain + filename;
-        request.open("GET", filename, true);
-
-        request.onreadystatechange = () => {
-            console.info(request.readyState + ' - ' + request.status);
-            if (request.readyState == 4) {
-                if (request.status == 200) {   // OK
-                    this.handleLoadedModel(gl, filename, JSON.parse(request.responseText));
-                } else if (document.domain.length === 0 && request.status === 0) {
-
-                    //  OK but local, no web server
-                    this.handleLoadedModel(gl, filename, JSON.parse(request.responseText));
-
-                } else {
-
-                    alert('There was a problem loading the file :' + filename);
-
-                    alert('HTML error code: ' + request.status);
-
-                }
-
-            }
-
-        };
-
-        request.send();
-
-    }
+            case "bunny":
+                this.handleLoadedModel(bunny);
+                break;
+            case "cone":
+                this.handleLoadedModel(cone);
+                break;
+            case "cube":
+                this.handleLoadedModel(cube);
+                break;
+            case "e37":
+                this.handleLoadedModel(e37);
+                break;
+            case "elephant":
+                this.handleLoadedModel(elephant);
+                break;
+        }
 
 
-    /******************************************************************************/
-    makePrograms = (gl: iWebGLRenderingContext) => {
-
-        //  This function uses cuon-utils.js functions createProgram and loadShader
-        //  to creates four programs corresponding to the four shading methods.
-        //  *** gl.prgF (Flat or faceted shading)
-
-        //  Extract the text strings strv and strf from the shader script tags.
-        gl.programs = [
-            {
-                name: 'prgF',
-                program: createProgram(gl, this.VSHADER_SOURCE_FLAT_SHADING, this.FSHADER_SOURCE_FLAT_SHADING)
-            }, {
-                name: 'prgG',
-                program: createProgram(gl, this.VSHADER_SOURCE_FLAT_SHADING, this.FSHADER_SOURCE_GOURAUD_SHADING)
-            }, {
-                name: 'prgP',
-                program: createProgram(gl, this.VSHADER_SOURCE_FLAT_SHADING, this.FSHADER_SOURCE_PHONG_SHADING)
-            }, {
-                name: 'prgW',
-                program: createProgram(gl, this.VSHADER_SOURCE_FLAT_SHADING, this.FSHADER_SOURCE_WIRE_SHADING)
-            },
-        ];
-
-        return true;
     }
 
 
@@ -1564,93 +1549,92 @@ export default class RotateObjectWithMouse extends Component<any, any> {
 
     render() {
 
-        return (
-            <>
-                <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
+        return <div>
+            <canvas id={"webgl"} width={window.innerWidth} height={window.innerHeight}/>
 
-                <p> Shading method:</p>
-                <form>
-                    <input type="radio" name="shading" id="phong"
-                           value="Phong" checked/> Phong shading<br/>
-                    <input type="radio" name="shading" id="gouraud"
-                           value="Gouraud"/> Gouraud shading<br/>
-                    <input type="radio" name="shading" id="flat"
-                           value="Flat"/> Flat shading<br/>
-                    <input type="radio" name="shading" id="wireframe"
-                           value="Wireframe"/> Wireframe mesh
-                </form>
-                <br/>
-                <table style={{width: "500"}}>
-                    <caption>Keypress Options</caption>
-                    <tr>
-                        <th>Key</th>
-                        <th>Function</th>
-                    </tr>
-                    <tr>
-                        <td>Left Arrow</td>
-                        <td>Rotate model left about y axis (fast)</td>
-                    </tr>
-                    <tr>
-                        <td>Right Arrow</td>
-                        <td>Rotate model right about y axis (fast)</td>
-                    </tr>
-                    <tr>
-                        <td>Up Arrow</td>
-                        <td>Rotate model up about x axis (fast)</td>
-                    </tr>
-                    <tr>
-                        <td>Down Arrow</td>
-                        <td>Rotate model down about x axis (fast)</td>
-                    </tr>
-                    <tr>
-                        <td>e</td>
-                        <td>Halve (double) shininess exponent</td>
-                    </tr>
-                    <tr>
-                        <td>i</td>
-                        <td>Rotate light source down (up) about x axis</td>
-                    </tr>
-                    <tr>
-                        <td>j</td>
-                        <td>Rotate light source right (left) about y axis</td>
-                    </tr>
-                    <tr>
-                        <td>p</td>
-                        <td>Toggle perspective/orthographic projection</td>
-                    </tr>
-                    <tr>
-                        <td>r</td>
-                        <td>Restore defaults</td>
-                    </tr>
-                    <tr>
-                        <td>x</td>
-                        <td>Rotate camera up (down) about x axis</td>
-                    </tr>
-                    <tr>
-                        <td>y</td>
-                        <td>Rotate camera left (right) about y axis</td>
-                    </tr>
-                    <tr>
-                        <td>z</td>
-                        <td>Rotate camera CCW (clockwise) about z axis</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {"<"}
-                        </td>
-                        <td>Zoom in</td>
-                    </tr>
-                    <tr>
-                        <td>{">"}</td>
-                        <td>Zoom out</td>
-                    </tr>
-                </table>
-                <p>Options in parentheses are selected with the Shift key.</p>
-
-                <br/>
-                <input type="text" value="Keyboard"/>
-            </>
-        );
+            <p> Shading method:</p>
+            <form>
+                <input type="radio" name="shading" id="phong"
+                       value="Phong" checked/> Phong shading<br/>
+                <input type="radio" name="shading" id="gouraud"
+                       value="Gouraud"/> Gouraud shading<br/>
+                <input type="radio" name="shading" id="flat"
+                       value="Flat"/> Flat shading<br/>
+                <input type="radio" name="shading" id="wireframe"
+                       value="Wireframe"/> Wireframe mesh
+            </form>
+            <br/>
+            <p>Keypress Options</p>
+            <table>
+                <tbody>
+                <tr>
+                    <th>Key</th>
+                    <th>Function</th>
+                </tr>
+                <tr>
+                    <td>Left Arrow</td>
+                    <td>Rotate model left about y axis (fast)</td>
+                </tr>
+                <tr>
+                    <td>Right Arrow</td>
+                    <td>Rotate model right about y axis (fast)</td>
+                </tr>
+                <tr>
+                    <td>Up Arrow</td>
+                    <td>Rotate model up about x axis (fast)</td>
+                </tr>
+                <tr>
+                    <td>Down Arrow</td>
+                    <td>Rotate model down about x axis (fast)</td>
+                </tr>
+                <tr>
+                    <td>e</td>
+                    <td>Halve (double) shininess exponent</td>
+                </tr>
+                <tr>
+                    <td>i</td>
+                    <td>Rotate light source down (up) about x axis</td>
+                </tr>
+                <tr>
+                    <td>j</td>
+                    <td>Rotate light source right (left) about y axis</td>
+                </tr>
+                <tr>
+                    <td>p</td>
+                    <td>Toggle perspective/orthographic projection</td>
+                </tr>
+                <tr>
+                    <td>r</td>
+                    <td>Restore defaults</td>
+                </tr>
+                <tr>
+                    <td>x</td>
+                    <td>Rotate camera up (down) about x axis</td>
+                </tr>
+                <tr>
+                    <td>y</td>
+                    <td>Rotate camera left (right) about y axis</td>
+                </tr>
+                <tr>
+                    <td>z</td>
+                    <td>Rotate camera CCW (clockwise) about z axis</td>
+                </tr>
+                <tr>
+                    <td>
+                        {"<"}
+                    </td>
+                    <td>Zoom in</td>
+                </tr>
+                <tr>
+                    <td>{">"}</td>
+                    <td>Zoom out</td>
+                </tr>
+                </tbody>
+            </table>
+            <p>Options in parentheses are selected with the Shift key.</p>
+            <br/>
+            <input type="text" value="Keyboard"/>
+        </div>
     }
 
 }

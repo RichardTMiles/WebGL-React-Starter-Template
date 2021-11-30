@@ -33,7 +33,10 @@ export default class RotatingTriangle extends Component<any, any> {
 
     componentDidMount() {
         // Get the rendering context for WebGL
-        var gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        var gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         // Write the positions of vertices to a vertex shader
         var n = this.initVertexBuffers(gl);
@@ -46,8 +49,14 @@ export default class RotatingTriangle extends Component<any, any> {
         // Specify the color for clearing <canvas>
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
         // Get storage location of u_ModelMatrix
-        var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+        var u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix');
 
         if (!u_ModelMatrix) {
             console.log('Failed to get the storage location of u_ModelMatrix');

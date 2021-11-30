@@ -89,7 +89,10 @@ export default class Pendulum2 extends Component<{}, { }> {
 
     componentDidMount() {
         //  Get the rendering context for WebGL
-        this.gl = getWebGLContext("webgl", this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        this.gl = getWebGLContext("webgl", [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         //  Specify the color for clearing <canvas>
         this.gl.clearColor(0, 0, 0, 1);
@@ -100,12 +103,18 @@ export default class Pendulum2 extends Component<{}, { }> {
             return;
         }
 
+        const program = this.gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program in pend'
+        }
+
         //  Get the storage locations of attribute and uniform variables
-        this.a_Position = this.gl.getAttribLocation(this.gl.program, "a_Position");
+        this.a_Position = this.gl.getAttribLocation(program, "a_Position");
 
-        this.u_FragColor = this.gl.getUniformLocation(this.gl.program, "u_FragColor");
+        this.u_FragColor = this.gl.getUniformLocation(program, "u_FragColor");
 
-        this.u_ModelMatrix = this.gl.getUniformLocation(this.gl.program, "u_ModelMatrix");
+        this.u_ModelMatrix = this.gl.getUniformLocation(program, "u_ModelMatrix");
 
         if (this.a_Position < 0 || !this.u_FragColor || !this.u_ModelMatrix) {
             console.log("Failed to get the storage location of an attribute " +

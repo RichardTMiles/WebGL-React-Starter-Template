@@ -35,7 +35,10 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        var gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        var gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         if (!gl) {
             console.log('Failed to get the rendering context for WebGL');
@@ -63,8 +66,14 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
             0.0,  0.0, 0.0, 1.0
         ]);
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
         // Pass the rotation matrix to the vertex shader
-        var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
+        var u_xformMatrix = gl.getUniformLocation(program, 'u_xformMatrix');
 
         if (!u_xformMatrix) {
             console.log('Failed to get the storage location of u_xformMatrix');
@@ -105,7 +114,13 @@ export default class RotatedTriangleMatrix extends Component<any, any> {
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-        var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
+        var a_Position = gl.getAttribLocation(program, 'a_Position');
 
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');

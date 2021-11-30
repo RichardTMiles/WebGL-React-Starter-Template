@@ -40,10 +40,19 @@ export default class ClickedPoints extends Component<any, {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
+
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program in clickedPoints.tsx'
+        }
 
         // // Get the storage location of a_Position
-        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const a_Position = gl.getAttribLocation(program, 'a_Position');
 
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');

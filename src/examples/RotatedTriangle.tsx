@@ -41,7 +41,10 @@ export default class RotatedTriangle extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         if (!gl) {
             console.log('Failed to get the rendering context for WebGL');
@@ -63,9 +66,15 @@ export default class RotatedTriangle extends Component<any, any> {
 
         const sinB = Math.sin(radian);
 
-        const u_CosB = gl.getUniformLocation(gl.program, 'u_CosB');
+        const program = gl?.program?.value;
 
-        const u_SinB = gl.getUniformLocation(gl.program, 'u_SinB');
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
+        const u_CosB = gl.getUniformLocation(program, 'u_CosB');
+
+        const u_SinB = gl.getUniformLocation(program, 'u_SinB');
 
         if (!u_CosB || !u_SinB) {
 
@@ -110,7 +119,13 @@ export default class RotatedTriangle extends Component<any, any> {
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
+        const a_Position = gl.getAttribLocation(program, 'a_Position');
 
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');

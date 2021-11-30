@@ -14,15 +14,19 @@ const APP_ROOT = process.cwd();
 
 const isAppLocal = '3000' === window.location.port;
 
-const UriStyling = isAppLocal ? Router : HashRouter;
-
 console.log(APP_ROOT);
+
+const DOM = isAppLocal ?
+    <Router history={hist}>
+        <Bootstrap/>
+    </Router>
+    :
+    <HashRouter history={hist}>
+    <Bootstrap/>
+</HashRouter>;
 
 // @link https://sites.google.com/site/webglbook/home
 // @link https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
-ReactDOM.render(
-    <UriStyling history={hist}>
-        <Bootstrap/>
-    </UriStyling>,
+ReactDOM.render(DOM,
     document.getElementById("root")
 );

@@ -44,7 +44,10 @@ export default class Hud extends Component<any, any> {
 
     componentDidMount() {
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         // Retrieve <canvas> element
         const hud: HTMLCanvasElement | null = document.getElementById('hud') as HTMLCanvasElement;
@@ -75,10 +78,16 @@ export default class Hud extends Component<any, any> {
 
         gl.enable(gl.DEPTH_TEST);
 
-        // Get the storage locations of uniform variables
-        const u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
+        const program = gl?.program?.value;
 
-        const u_Clicked = gl.getUniformLocation(gl.program, 'u_Clicked');
+        if (program === undefined) {
+            throw 'Failed to capture program in hud.tsx'
+        }
+
+        // Get the storage locations of uniform variables
+        const u_MvpMatrix = gl.getUniformLocation(program, 'u_MvpMatrix');
+
+        const u_Clicked = gl.getUniformLocation(program, 'u_Clicked');
 
         if (!u_MvpMatrix || !u_Clicked) {
             console.log('Failed to get the storage location of uniform variables');

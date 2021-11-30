@@ -196,9 +196,11 @@ class bootstrap extends Component<any, {
 
     }
 
-    passPropertiesAndRender(Component, props) {
+    passPropertiesAndRender(PassComponent : React.ComponentType | React.FunctionComponent, props) {
 
-        return <Component
+        console.log(PassComponent, props)
+
+        return <PassComponent
             startInputChangeUpdateRoutine={this.startInputChangeUpdateRoutine}
             changeLoggedInStatus={this.changeLoggedInStatus}
             codeBlock={this.codeBlock}

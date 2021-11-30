@@ -30,7 +30,10 @@ export default class HelloTriangleLoop extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         if (!gl) {
             console.log('Failed to get the rendering context for WebGL');

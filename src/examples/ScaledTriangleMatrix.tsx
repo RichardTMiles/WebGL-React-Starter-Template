@@ -37,7 +37,10 @@ export default class ScaledTriangleMatrix extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         // Write the positions of vertices to a vertex shader
         const n = this.initVertexBuffers(gl);
@@ -55,8 +58,14 @@ export default class ScaledTriangleMatrix extends Component<any, any> {
             0.0, 0.0, 0.0, 1.0
         ]);
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
         // Pass the rotation matrix to the vertex shader
-        const u_xformMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
+        const u_xformMatrix = gl.getUniformLocation(program, 'u_xformMatrix');
 
         if (!u_xformMatrix) {
 
@@ -80,6 +89,7 @@ export default class ScaledTriangleMatrix extends Component<any, any> {
     }
 
     initVertexBuffers(gl) {
+
         const vertices = new Float32Array([
             0, 0.5, -0.5, -0.5, 0.5, -0.5
         ]);
@@ -100,7 +110,13 @@ export default class ScaledTriangleMatrix extends Component<any, any> {
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
+        const a_Position = gl.getAttribLocation(program, 'a_Position');
 
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');

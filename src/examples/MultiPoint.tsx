@@ -34,7 +34,10 @@ export default class MultiPoint extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext(this.canvasId, this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext(this.canvasId, [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
 
         // Write the positions of vertices to a vertex shader
@@ -82,7 +85,13 @@ export default class MultiPoint extends Component<any, any> {
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
+        const a_Position = gl.getAttribLocation(program, 'a_Position');
 
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');

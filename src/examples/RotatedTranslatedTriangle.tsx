@@ -32,7 +32,10 @@ export default class RotatedTranslatedTriangle extends Component<any, any> {
     componentDidMount() {
 
         // Get the rendering context for WebGL
-        const gl = getWebGLContext('webgl', this.VSHADER_SOURCE, this.FSHADER_SOURCE);
+        const gl = getWebGLContext('webgl', [{
+            vertexShader: this.VSHADER_SOURCE,
+            fragmentShader: this.FSHADER_SOURCE
+        }]);
 
         // Write the positions of vertices to a vertex shader
         const n = this.initVertexBuffers(gl);
@@ -54,8 +57,14 @@ export default class RotatedTranslatedTriangle extends Component<any, any> {
 
         modelMatrix.translate(Tx, 0, 0);        // Multiply modelMatrix by the calculated translation matrix
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
         // Pass the model matrix to the vertex shader
-        const u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+        const u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix');
 
         if (!u_ModelMatrix) {
             console.log('Failed to get the storage location of u_xformMatrix');
