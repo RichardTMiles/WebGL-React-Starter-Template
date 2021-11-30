@@ -69,10 +69,18 @@ export default class HelloTriangleStrip extends Component<any, any> {
 
         // Bind the buffer object to target
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-        const a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
+        const a_Position = gl.getAttribLocation(program, 'a_Position');
+
         if (a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
             return -1;

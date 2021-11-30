@@ -203,7 +203,6 @@ export function getWebGLContext<iWebGLRenderingContextAdditionalAttributesType =
 
         createProgram<any, WebGLProgramType>(gl, value.vertexShader, value.fragmentShader, value.name);
 
-
     });
 
     return gl as iWebGLRenderingContext<iWebGLRenderingContextAdditionalAttributesType, WebGLProgramType>;

@@ -124,7 +124,7 @@ export default class Bezier extends Component<any, any> {
         this.gl.clearColor(0, 0, 0, 1);
 
         //  Get the storage locations of attribute and uniform variables
-        this.prg = this.gl.program;
+        this.prg = this.gl.program?.value;
 
         this.prg.a_Position = this.gl.getAttribLocation(this.prg, 'a_Position');
 

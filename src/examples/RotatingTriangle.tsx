@@ -96,12 +96,20 @@ export default class RotatingTriangle extends Component<any, any> {
         // Write date into the buffer object
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
         // Assign the buffer object to a_Position variable
-        var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+        var a_Position = gl.getAttribLocation(program, 'a_Position');
+
         if(a_Position < 0) {
             console.log('Failed to get the storage location of a_Position');
             return -1;
         }
+
         gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
 
         // Enable the assignment to a_Position variable

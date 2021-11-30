@@ -315,8 +315,14 @@ export default class Hud extends Component<any, any> {
 
         gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
 
+        const program = gl?.program?.value;
+
+        if (program === undefined) {
+            throw 'Failed to capture program'
+        }
+
         // Assign the buffer object to the attribute variable
-        const a_attribute = gl.getAttribLocation(gl.program, attribute);
+        const a_attribute = gl.getAttribLocation(program, attribute);
 
         if (a_attribute < 0) {
             console.log('Failed to get the storage location of ' + attribute);
