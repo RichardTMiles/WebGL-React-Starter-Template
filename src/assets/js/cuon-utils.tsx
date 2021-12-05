@@ -168,8 +168,7 @@ export interface iProgramArgs {
  * @return the rendering context for WebGL
  */
 export function getWebGLContext<iWebGLRenderingContextAdditionalAttributesType = any, WebGLProgramType = iWebGLRenderingContextProgram>
-(canvasId: string, programs ?: Array<iProgramArgs>)
-    : iWebGLRenderingContext<iWebGLRenderingContextAdditionalAttributesType, WebGLProgramType> {
+(canvasId: string, programs ?: Array<iProgramArgs>): iWebGLRenderingContext<iWebGLRenderingContextAdditionalAttributesType, WebGLProgramType> {
 
     const canvas: HTMLCanvasElement | null = document.getElementById(canvasId) as HTMLCanvasElement;
 

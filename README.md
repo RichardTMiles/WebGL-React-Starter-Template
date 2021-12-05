@@ -64,9 +64,26 @@ making the border; so the ~ playable game is really only 34 in length.
 
 [sample one](http://www.webtowerdefense.com/)
 
-### Other Cool Demos not ported
+### Other Cool Demos not (yet?) ported
 
+[double rotating square](file:///Users/chyllemiles/Downloads/www.cse.unt.edu/~renka/5220/matsuda/ch10/ProgramObject.html)
+[particle system](https://www.cs.unm.edu/~angel/WebGL/7E/10/particleSystem.html)
+[particle defusion](https://www.cs.unm.edu/~angel/WebGL/7E/10/particleDiffusion1.html)
 [quantom computing](https://algassert.com/quirk#)
+[snake](https://plnkr.co/edit/EPyxbRDmSg0tstD5Q55h?preview)
+
+#### Even More Reading
+
+[Linear Algebra Review](https://www.youtube.com/watch?v=kjBOesZCoqc)
+[Matsuda & Lea examples](https://sites.google.com/site/webglbook/home/chapter-1)
+[Matsuda & Lea examples (old)](http://www.cse.unt.edu/~renka/5220/matsuda/)
+[SIGGRAPH17 Course](https://www.cs.unm.edu/~angel/SIGGRAPH17/COURSE/s17_final.pdf)
+[JavaScript Tutorial](https://www.w3schools.com/js/)
+[OpenGL Home Page](http://www.opengl.org/)
+[On-line version of Redbook](http://www.glprogramming.com/red/)
+[Redbook Code Samples](http://www.opengl.org/archives/resources/code/samples/redbook/)
+[UNT Graphics Course](http://www.cse.unt.edu/~renka/4230/cs4230.html)
+[line clipping](http://www.cse.unt.edu/~renka/4230/LineClipping.pdf)
 
 ## Terminology 
 

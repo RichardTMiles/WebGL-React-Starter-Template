@@ -116,8 +116,12 @@ class bootstrap extends Component<any, {
         });
     };
 
-    semaphoreLock = <T extends Component>(context ?: T): Function => {
-        return (callback: Function, localLock: boolean = false): Function => (opt ?: any): boolean => {
+    semaphoreLock = <T extends Component>(context ?: T): Function =>
+    {
+        type voidFunction = (opt ?: any) => void;
+        type boolFunction = () => boolean;
+
+        return (callback: voidFunction, localLock: boolean = false): boolFunction => (opt ?: any): boolean => {
 
             const criticalSection = async (): Promise<void> => {
                 console.time("Critical Section");
@@ -163,7 +167,7 @@ class bootstrap extends Component<any, {
                 return true;
             }
             return false;
-        }
+        };
     };
 
 

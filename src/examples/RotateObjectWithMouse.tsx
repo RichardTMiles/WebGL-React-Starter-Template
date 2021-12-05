@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import {Matrix4, Vector3} from "assets/js/cuon-matrix";
 import {
     getWebGLContext,
