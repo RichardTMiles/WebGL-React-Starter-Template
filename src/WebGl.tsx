@@ -27,6 +27,7 @@ import RotateObjectWithMouse from "./examples/RotateObjectWithMouse";
 import Chaos from "./examples/Chaos";
 import Pendulum2 from "./examples/Pendulum2";
 import Bezier from "./examples/Bezier";
+import Nest from "./examples/Nest";
 
 
 
@@ -143,6 +144,10 @@ export default class WebGl extends Component<{ axios: AxiosInstance,
                 path: "/WebGl/RotateObjectWithMouse",
                 name: "RotateObjectWithMouse",
                 component: RotateObjectWithMouse
+            },{
+                path: "/WebGl/Nest",
+                name: "Nest",
+                component: Nest
             },{
                 path: "/WebGl/HUD",
                 name: "HUD",

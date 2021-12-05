@@ -502,6 +502,7 @@ export default class RotateObjectWithMouse extends Component<any, any> {
     gl ?: iWebGlWithAdditionalAttributes;
 
     componentDidMount() {
+
         //  This function is invoked by the onLoad event of the web page.
         //  Retrieve <canvas> element.
         const canvas = document.getElementById("webgl");
