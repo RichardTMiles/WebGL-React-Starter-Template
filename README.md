@@ -1,6 +1,6 @@
 # Special Thanks
 * [Robert Renka](https://computerscience.engineering.unt.edu/people/faculty/robert-renka)
-* 
+* [Mark Thompson](https://computerscience.engineering.unt.edu/people/faculty/mark-thompson)
 
 # Overview
 * Compiling an open source react sample to illustrate and teach FUNDAMENTAL graphics and game programming. 
