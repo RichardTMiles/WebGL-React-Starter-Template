@@ -30,8 +30,8 @@ export default class Nest extends Component<NestProps, {
         zIndex: -1,
         count: 99,
         opacity: 0.5,
-        color: '0,0,0',
-        pointColor: '0,0,0',
+        color: '40,0,255',
+        pointColor: '255,0,0',
         position: "relative"
     };
 
@@ -74,14 +74,6 @@ export default class Nest extends Component<NestProps, {
             [this.current]
         );
 
-        this.bindEvent();
-
-        this.drawCanvas()
-
-    }
-
-    bindEvent() {
-
         if (undefined === this.canvas) {
 
             alert('failed to get canvas');
@@ -98,6 +90,8 @@ export default class Nest extends Component<NestProps, {
             this.current.x = null;
             this.current.y = null;
         };
+
+        this.drawCanvas()
 
     }
 
@@ -123,17 +117,14 @@ export default class Nest extends Component<NestProps, {
         const points = this.points;
         const all = this.all;
 
-        console.log(all, points, current, context)
-
-
         if (undefined === context
             || undefined === current
             || undefined === points
         ) {
+            alert('context, current, or points was undefined. quitting.')
+
             return;
         }
-
-        console.log(points)
 
         context.clearRect(0, 0, width, height);
 
