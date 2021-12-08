@@ -180,8 +180,8 @@ export default class WebGl extends Component<{ axios: AxiosInstance,
 
 
         return <>
-            {this.props.subRoutingSwitch(Routes, {Routes})}
-            {alert}
+                {this.props.subRoutingSwitch(Routes, {Routes})}
+                {alert}
         </>;
     }
 }

@@ -18,7 +18,8 @@ interface iTwoDAnimated extends iTwoD {
 }
 
 type NestProps = typeof Nest.defaultProps & {
-    age: number;
+    children?: any;
+    position: "relative" | "-moz-initial" | "inherit" | "initial" | "revert" | "unset" | "-webkit-sticky" | "absolute" | "fixed" | "static" | "sticky",
 };
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
@@ -27,9 +28,14 @@ export default class Nest extends Component<NestProps, {
     // this is un necessary overhead with canvas apps.
 }> {
     static defaultProps = {
+        backgroundColor: "white",
+        display:"block",
+        top: 0,
+        left: 0,
         zIndex: -1,
         count: 99,
         opacity: 0.5,
+        overflow: "hidden",
         color: '40,0,255',
         pointColor: '255,0,0',
         position: "relative"
@@ -81,7 +87,7 @@ export default class Nest extends Component<NestProps, {
             return;
         }
 
-        this.canvas.onmousemove = e => {
+        document.onmousemove = e => {
             this.current.x = e.clientX; // - this.el.offsetLeft + document.scrollingElement.scrollLeft; // 当存在横向滚动条时，x坐标再往右移动滚动条拉动的距离
             this.current.y = e.clientY; // - this.el.offsetTop + document.scrollingElement.scrollTop; // 当存在纵向滚动条时，y坐标再往下移动滚动条拉动的距离
         };
@@ -211,7 +217,21 @@ export default class Nest extends Component<NestProps, {
 
         return (
             <div>
-                <canvas id={"2d"} width={window.innerWidth} height={window.innerHeight} style={{backgroundColor: "white"}}/>
+                {this.props.children}
+                <canvas
+                    id={"2d"}
+                    width={window.innerWidth}
+                    height={window.innerHeight}
+                    style={{
+                        backgroundColor: this.props.backgroundColor,
+                        display:this.props.display,
+                        position: this.props.position,
+                        top: this.props.top,
+                        left: this.props.left,
+                        overflow: this.props.overflow,
+                        zIndex: this.props.zIndex,
+                        opacity: this.props.opacity
+                    }}/>
             </div>
         );
     }
