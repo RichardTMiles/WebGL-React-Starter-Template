@@ -1,0 +1,2 @@
+(this["webpackJsonpwebgl-react-"]=this["webpackJsonpwebgl-react-"]||[]).push([[106],{333:function(t,e,s){"use strict";function n(t){t.languages.properties={comment:/^[ \t]*[#!].*$/m,"attr-value":{pattern:/(^[ \t]*(?:\\(?:\r\n|[\s\S])|[^\\\s:=])+?(?: *[=:] *| ))(?:\\(?:\r\n|[\s\S])|[^\\\r\n])+/m,lookbehind:!0},"attr-name":/^[ \t]*(?:\\(?:\r\n|[\s\S])|[^\\\s:=])+?(?= *[=:] *| )/m,punctuation:/[=:]/}}t.exports=n,n.displayName="properties",n.aliases=[]}}]);
+//# sourceMappingURL=react-syntax-highlighter_languages_refractor_properties.e45e43c4.chunk.js.map

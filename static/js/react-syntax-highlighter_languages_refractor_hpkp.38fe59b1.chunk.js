@@ -1,2 +1,0 @@
-(this["webpackJsonporb-defence-react"]=this["webpackJsonporb-defence-react"]||[]).push([[54],{287:function(e,a,t){"use strict";function s(e){e.languages.hpkp={directive:{pattern:/\b(?:(?:includeSubDomains|preload|strict)(?: |;)|pin-sha256="[a-zA-Z\d+=/]+"|(?:max-age|report-uri)=|report-to )/,alias:"keyword"},safe:{pattern:/\d{7,}/,alias:"selector"},unsafe:{pattern:/\d{1,6}/,alias:"function"}}}e.exports=s,s.displayName="hpkp",s.aliases=[]}}]);
-//# sourceMappingURL=react-syntax-highlighter_languages_refractor_hpkp.38fe59b1.chunk.js.map
