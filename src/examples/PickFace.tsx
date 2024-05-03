@@ -80,12 +80,15 @@ export default class PickFace extends Component<any, any> {
         const u_PickedFace = gl.getUniformLocation(program, 'u_PickedFace');
 
         if (!u_MvpMatrix || !u_PickedFace) {
+
             console.log('Failed to get the storage location of uniform variable');
+
             return;
+
         }
 
         // Calculate the view projection matrix
-        const viewProjMatrix = new Matrix4(undefined);
+        const viewProjMatrix = new Matrix4();
 
         viewProjMatrix.setPerspective(30.0, window.innerWidth / window.innerHeight, 1.0, 100.0);
 
@@ -207,23 +210,33 @@ export default class PickFace extends Component<any, any> {
     }
 
     checkFace = (gl, n, x, y, currentAngle, u_PickedFace, viewProjMatrix, u_MvpMatrix) => {
+
         const pixels = new Uint8Array(4); // Array for storing the pixel value
+
         gl.uniform1i(u_PickedFace, 0);  // Draw by writing surface number into alpha value
+
         this.draw(gl, n, currentAngle, viewProjMatrix, u_MvpMatrix);
+
         // Read the pixel value of the clicked position. pixels[3] is the surface number
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
         return pixels[3];
+
     }
 
-    g_MvpMatrix = new Matrix4(undefined); // Model view projection matrix
+    g_MvpMatrix : Matrix4 = new Matrix4(); // Model view projection matrix
 
     draw = (gl, n, currentAngle, viewProjMatrix, u_MvpMatrix) => {
-        // Caliculate The model view projection matrix and pass it to u_MvpMatrix
+
+        // Calculate the model view projection matrix and pass it to u_MvpMatrix
         this.g_MvpMatrix.set(viewProjMatrix);
+
         this.g_MvpMatrix.rotate(currentAngle, 1.0, 0.0, 0.0); // Rotate appropriately
+
         this.g_MvpMatrix.rotate(currentAngle, 0.0, 1.0, 0.0);
+
         this.g_MvpMatrix.rotate(currentAngle, 0.0, 0.0, 1.0);
+
         gl.uniformMatrix4fv(u_MvpMatrix, false, this.g_MvpMatrix.elements);
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     // Clear buffers

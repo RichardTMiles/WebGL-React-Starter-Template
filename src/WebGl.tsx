@@ -30,7 +30,6 @@ import Bezier from "./examples/Bezier";
 import Nest from "./examples/Nest";
 
 
-
 export interface iCustomRoute {
     component?: any,
     name?: string,
@@ -39,7 +38,8 @@ export interface iCustomRoute {
     redirect?: boolean
 }
 
-export default class WebGl extends Component<{ axios: AxiosInstance,
+export default class WebGl extends Component<{
+    axios: AxiosInstance,
     authenticate: string,
     isAppLocal?: boolean,
     authenticated?: boolean,
@@ -51,9 +51,7 @@ export default class WebGl extends Component<{ axios: AxiosInstance,
     versions: Array<any>,
     id: string
     subRoutingSwitch: Function
-}, {
-
-}> {
+}, {}> {
     constructor(props) {
 
         super(props);
@@ -65,7 +63,7 @@ export default class WebGl extends Component<{ axios: AxiosInstance,
 
 
         // Routes that belong to the public and private sector
-        let Routes : iCustomRoute[] = [
+        let Routes: iCustomRoute[] = [
             {
                 path: "/WebGl/Multi",
                 name: "Multi-Point",
@@ -80,75 +78,75 @@ export default class WebGl extends Component<{ axios: AxiosInstance,
                 path: "/WebGl/Colored",
                 name: "Colored Points",
                 component: ColoredPoints
-            },{
+            }, {
                 path: "/WebGl/HelloTriangle",
                 name: "HelloTriangle",
                 component: HelloTriangle
-            },{
+            }, {
                 path: "/WebGl/HelloTriangleLines",
                 name: "HelloTriangleLines",
                 component: HelloTriangleLines
-            },{
+            }, {
                 path: "/WebGl/HelloTriangleStrip",
                 name: "HelloTriangleStrip",
                 component: HelloTriangleStrip
-            },{
+            }, {
                 path: "/WebGl/HelloTriangleLoop",
                 name: "HelloTriangleLoop",
                 component: HelloTriangleLoop
-            },{
+            }, {
                 path: "/WebGl/HelloQuad",
                 name: "HelloQuad",
                 component: HelloQuad
-            },{
+            }, {
                 path: "/WebGl/HelloQuadFan",
                 name: "HelloQuadFan",
                 component: HelloQuadFan
-            },{
+            }, {
                 path: "/WebGl/RotatedTriangle",
                 name: "RotatedTriangle",
                 component: RotatedTriangle
-            },{
+            }, {
                 path: "/WebGl/RotatedTriangleMatrix",
                 name: "RotatedTriangleMatrix",
                 component: RotatedTriangleMatrix
-            },{
+            }, {
                 path: "/WebGl/ScaledTriangleMatrix",
                 name: "ScaledTriangleMatrix",
                 component: ScaledTriangleMatrix
-            },{
+            }, {
                 path: "/WebGl/RotatedTranslatedTriangle",
                 name: "RotatedTranslatedTriangle",
                 component: RotatedTranslatedTriangle
-            },{
+            }, {
                 path: "/WebGl/RotatingTriangle",
                 name: "RotatingTriangle",
                 component: RotatingTriangle
-            },{
+            }, {
                 path: "/WebGl/Chaos",
                 name: "Chaos",
                 component: Chaos
-            },{
+            }, {
                 path: "/WebGl/Pendulum2",
                 name: "Pendulum2",
                 component: Pendulum2
-            },{
+            }, {
                 path: "/WebGl/Bezier",
                 name: "Bezier",
                 component: Bezier
-            },{
+            }, {
                 path: "/WebGl/PickFace",
                 name: "PickFace",
                 component: PickFace
-            },{
+            }, {
                 path: "/WebGl/RotateObjectWithMouse",
                 name: "RotateObjectWithMouse",
                 component: RotateObjectWithMouse
-            },{
+            }, {
                 path: "/WebGl/Nest",
                 name: "Nest",
                 component: Nest
-            },{
+            }, {
                 path: "/WebGl/HUD",
                 name: "HUD",
                 component: Hud
@@ -180,8 +178,11 @@ export default class WebGl extends Component<{ axios: AxiosInstance,
 
 
         return <>
-                {this.props.subRoutingSwitch(Routes, {Routes})}
-                {alert}
+            <p>These examples are designed to show the fundamentals of web computer graphics. They are as simple as
+                possible to most complex. Many not experien ced with web graphics will not be entertained until the
+                <b>AudioThreeJS</b> example. The <b>Orb Defence</b> example is a game.</p>
+            {this.props.subRoutingSwitch(Routes, {Routes})}
+            {alert}
         </>;
     }
 }
