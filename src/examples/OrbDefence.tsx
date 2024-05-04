@@ -1,10 +1,4 @@
 import React, {Component} from "react";
-import {Matrix4} from "assets/js/cuon-matrix";
-import {getWebGLContext, iWebGLRenderingContext} from "assets/js/cuon-utils";
-
-
-const a_Face = 'a_Face';
-const a_Color = 'a_Color';
 
 
 // @link https://sites.google.com/site/webglbook/home/chapter-3
