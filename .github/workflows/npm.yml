@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install # --legacy-peer-deps
+      - run: npm install --legacy-peer-deps
       - run: npm run build
       - name: JamesIves/github-pages-deploy-action@v4 🚀
         uses: JamesIves/github-pages-deploy-action@v4
