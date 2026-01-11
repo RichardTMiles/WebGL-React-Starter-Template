@@ -26,7 +26,7 @@
 # Installation and First Run
 Clone this repository!
 
-    git clone https://github.com/Drop-In-Gaming/WebGL-React-Starter-Template.git ~/WebGL-React-Starter-Template
+    git clone https://github.com/RichardTMiles/WebGL-React-Starter-Template.git ~/WebGL-React-Starter-Template
     
 
 Change directory into the root of this repository.
